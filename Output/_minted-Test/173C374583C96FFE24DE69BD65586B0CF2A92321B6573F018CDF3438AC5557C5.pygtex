@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}version 330 core}
+
+\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{vec4}\PYG{+w}{ }\PYG{n}{FragColour}\PYG{p}{;}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{main}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{	}\PYG{n}{FragColour}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kt}{vec4}\PYG{p}{(}\PYG{l+m+mf}{0.0}\PYG{n}{f}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{0.0}\PYG{n}{f}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{0.0}\PYG{n}{f}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.0}\PYG{n}{f}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

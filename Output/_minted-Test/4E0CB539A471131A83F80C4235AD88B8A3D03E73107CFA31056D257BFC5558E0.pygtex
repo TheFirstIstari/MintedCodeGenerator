@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nt}{\PYGZlt{}Application}\PYG{+w}{ }\PYG{n+na}{x:Class=}\PYG{l+s}{\PYGZdq{}UserInterface.App\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns=}\PYG{l+s}{\PYGZdq{}http://schemas.microsoft.com/winfx/2006/xaml/presentation\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns:x=}\PYG{l+s}{\PYGZdq{}http://schemas.microsoft.com/winfx/2006/xaml\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns:local=}\PYG{l+s}{\PYGZdq{}clr\PYGZhy{}namespace:UserInterface\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{Startup=}\PYG{l+s}{\PYGZdq{}Start\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{ShutdownMode=}\PYG{l+s}{\PYGZdq{}OnMainWindowClose\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{Exit=}\PYG{l+s}{\PYGZdq{}Application\PYGZus{}Exit\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{    }\PYG{n+nt}{\PYGZlt{}Application.Resources\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}Label\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}FontSize\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}16\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{    }\PYG{n+nt}{\PYGZlt{}/Application.Resources\PYGZgt{}}
+\PYG{n+nt}{\PYGZlt{}/Application\PYGZgt{}}
+\end{Verbatim}

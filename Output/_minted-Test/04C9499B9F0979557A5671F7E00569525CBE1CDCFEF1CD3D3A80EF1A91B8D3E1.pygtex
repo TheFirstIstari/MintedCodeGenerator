@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}ifndef FLAGS\PYGZus{}H}
+
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}pch.h\PYGZdq{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{SetFlags}\PYG{p}{(}\PYG{k+kt}{bool}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{obstacles}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{flags}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{xLength}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{yLength}\PYG{p}{);}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{CountFluidCells}\PYG{p}{(}\PYG{n}{BYTE}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{flags}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{);}
+
+\PYG{c+cp}{\PYGZsh{}endif }\PYG{c+c1}{// !FLAGS\PYGZus{}H}
+
+\end{Verbatim}

@@ -1,0 +1,32 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}ifndef DEFINITIONS\PYGZus{}CUH}
+\PYG{c+cp}{\PYGZsh{}define DEFINITIONS\PYGZus{}CUH}
+
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}Definitions.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}cuda.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}cuda\PYGZus{}runtime.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}device\PYGZus{}launch\PYGZus{}parameters.h\PYGZdq{}}
+
+\PYG{c+cp}{\PYGZsh{}define F\PYGZus{}PITCHACCESS(basePtr, pitch, i, j) (*((REAL*)((char*)(basePtr) + (i) * (pitch)) + (j))) }\PYG{c+c1}{// Used for accessing a location in a pitched array (F for float, FP for float pointer, B for byte, BP for byte pointer.)}
+\PYG{c+cp}{\PYGZsh{}define FP\PYGZus{}PITCHACCESS(basePtr, pitch, i, j) ((REAL*)((char*)(basePtr) + (i) * (pitch)) + (j)) }\PYG{c+c1}{// Used for accessing a location in a pitched array (F for float, FP for float pointer, B for byte, BP for byte pointer.)}
+\PYG{c+cp}{\PYGZsh{}define B\PYGZus{}PITCHACCESS(basePtr, pitch, i, j) (*((basePtr) + (i) * (pitch) + (j))) }\PYG{c+c1}{// Used for accessing a location in a pitched array (F for float, FP for float pointer, B for byte, BP for byte pointer.)}
+\PYG{c+cp}{\PYGZsh{}define BP\PYGZus{}PITCHACCESS(basePtr, pitch, i, j) ((basePtr) + (i) * (pitch) + (j)) }\PYG{c+c1}{// Used for accessing a location in a pitched array (F for float, FP for float pointer, B for byte, BP for byte pointer.)}
+
+\PYG{c+c1}{// Horrific macros to make intellisense stop complaining about the triple angle bracket syntax for kernel launches}
+\PYG{c+cp}{\PYGZsh{}ifndef \PYGZus{}\PYGZus{}INTELLISENSE\PYGZus{}\PYGZus{}}
+\PYG{c+cp}{\PYGZsh{}define KERNEL\PYGZus{}ARGS(numBlocks, numThreads, sh\PYGZus{}mem, stream) \PYGZlt{}\PYGZlt{}\PYGZlt{} numBlocks, numThreads, sh\PYGZus{}mem, stream \PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{c+c1}{// Launch a kernel with shared memory and stream specified.}
+\PYG{c+cp}{\PYGZsh{}else}
+\PYG{c+cp}{\PYGZsh{}define KERNEL\PYGZus{}ARGS(numBlocks, numThreads, sh\PYGZus{}mem, stream) }\PYG{c+c1}{// Launch a kernel with shared memory and stream specified.}
+\PYG{c+cp}{\PYGZsh{}endif}
+
+\PYG{c+cp}{\PYGZsh{}define INT\PYGZus{}DIVIDE\PYGZus{}ROUND\PYGZus{}UP(numerator, denominator) (((numerator) + (denominator) \PYGZhy{} 1) / (denominator))}
+
+\PYG{n}{template}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{n}{typename}\PYG{+w}{ }\PYG{n}{T}\PYG{o}{\PYGZgt{}}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{PointerWithPitch}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{T}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{ptr}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{size\PYGZus{}t}\PYG{+w}{ }\PYG{n}{pitch}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+cp}{\PYGZsh{}endif }\PYG{c+c1}{// !DEFINITIONS\PYGZus{}CUH}
+\end{Verbatim}

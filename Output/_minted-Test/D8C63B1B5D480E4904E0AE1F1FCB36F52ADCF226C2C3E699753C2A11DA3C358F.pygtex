@@ -1,0 +1,252 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{OpenTK.Graphics.OpenGL4}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Diagnostics}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{Visualisation}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{GLHelper}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates an array of vertices, with values for each coordinate in the field.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}fieldValues\PYGZdq{}\PYGZgt{}A flattened array of values for the field.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}width\PYGZdq{}\PYGZgt{}The number of vertices in the x direction.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}height\PYGZdq{}\PYGZgt{}The number of vertices in the y direction\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}An array of floats to be passed to the vertex shader.s\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[]}\PYG{+w}{ }\PYG{n+nf}{FillVertices}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{width}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{height}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{float}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{vertices}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[}\PYG{l+m}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{height}\PYG{p}{];}
+
+\PYG{+w}{            }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{horizontalStep}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2f}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{width}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{verticalStep}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2f}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{width}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{height}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{o}{++}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{c+c1}{// Need to start at bottom left (\PYGZhy{}1, \PYGZhy{}1) and go vertically then horizontally to top right (1, 1)}
+\PYG{+w}{                    }\PYG{n}{vertices}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{horizontalStep}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Starting at \PYGZhy{}1, increase x coordinate each iteration of outer loop}
+\PYG{+w}{                    }\PYG{n}{vertices}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{verticalStep}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}\PYG{+w}{  }\PYG{c+c1}{// Starting at \PYGZhy{}1, increase y coordinate after each iteration of inner loop}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{vertices}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates an index array for triangles to be drawn into a grid}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}width\PYGZdq{}\PYGZgt{}The width of the simulation space\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}height\PYGZdq{}\PYGZgt{}The height of the simulation space\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}An array of unsigned integers representing the indices of each triangle, flattened\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k+kt}{uint}\PYG{p}{[]}\PYG{+w}{ }\PYG{n+nf}{FillIndices}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{width}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{height}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{c+c1}{// Note that the given data has first data point bottom left, then moving upwards (in the positive y direction) then moving left (positive x direction)}
+\PYG{+w}{            }\PYG{k+kt}{uint}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{indices}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{uint}\PYG{p}{[(}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{width}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{p}{];}
+\PYG{+w}{            }\PYG{c+c1}{// For each 2x2 square of vertices, we need 2 triangles with the hypotenuses on the leading diagonal.}
+\PYG{+w}{            }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{o}{++}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{n}{indices}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{)(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{p}{);}\PYG{+w}{           }\PYG{c+c1}{// Top left}
+\PYG{+w}{                    }\PYG{n}{indices}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{)(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{);}\PYG{+w}{       }\PYG{c+c1}{// Top right}
+\PYG{+w}{                    }\PYG{n}{indices}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{)((}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Bottom right}
+\PYG{+w}{                    }\PYG{n}{indices}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{3}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{)(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{p}{);}\PYG{+w}{           }\PYG{c+c1}{// Top left}
+\PYG{+w}{                    }\PYG{n}{indices}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{4}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{)((}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Bottom right}
+\PYG{+w}{                    }\PYG{n}{indices}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{6}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{5}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{)((}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{j}\PYG{p}{);}\PYG{+w}{     }\PYG{c+c1}{// Bottom left}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates an array of \PYGZlt{}c\PYGZgt{}uint\PYGZlt{}/c\PYGZgt{}s, representing the indices of where contour vertices should be, with each level set separated by \PYGZlt{}paramref name=\PYGZdq{}primitiveRestartSentinel\PYGZdq{}/\PYGZgt{}.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}streamFunction\PYGZdq{}\PYGZgt{}The values of the stream function for the simulation domain.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}contourTolerance\PYGZdq{}\PYGZgt{}The tolerance for accepting a vertex into the level set.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}spacingMultiplier\PYGZdq{}\PYGZgt{}A multiplier, such that vertices that have a stream function value that is an integer multiple of this multiplier will be included into the level set\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}primitiveRestartSentinel\PYGZdq{}\PYGZgt{}The sentinel value, such as \PYGZlt{}c\PYGZgt{}uint.MaxValue\PYGZlt{}/c\PYGZgt{}\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}width\PYGZdq{}\PYGZgt{}The width of the simulation space\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}height\PYGZdq{}\PYGZgt{}The height of the simulation space\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}An array of \PYGZlt{}c\PYGZgt{}uint\PYGZlt{}/c\PYGZgt{}s, to be passed to the EBO\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k+kt}{uint}\PYG{p}{[]}\PYG{+w}{ }\PYG{n+nf}{FindContourIndices}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{contourTolerance}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{spacingMultiplier}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{uint}\PYG{+w}{ }\PYG{n}{primitiveRestartSentinel}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{width}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{height}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{uint}\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{+w}{ }\PYG{n}{levelSets}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{p}{();}
+\PYG{+w}{            }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{height}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{j}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Find level sets }
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{streamFunctionValue}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{j}\PYG{p}{];}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{streamFunctionValue}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{continue}\PYG{p}{;}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{distanceFromMultiple}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{streamFunctionValue}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{n}{spacingMultiplier}\PYG{p}{;}
+\PYG{+w}{                }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{levelSet}\PYG{p}{;}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{distanceFromMultiple}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{contourTolerance}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{spacingMultiplier}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{distanceFromMultiple}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{contourTolerance}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{n}{levelSet}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{Math}\PYG{p}{.}\PYG{n}{Round}\PYG{p}{(}\PYG{n}{streamFunctionValue}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{spacingMultiplier}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Round the value to get the correct level set}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{k}{else}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{continue}\PYG{p}{;}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{                }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{levelSet}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{n}{levelSets}\PYG{p}{.}\PYG{n}{Count}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Add level set lists until there is one for the current level set}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{n}{levelSets}\PYG{p}{.}\PYG{n}{Add}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{uint}\PYG{o}{\PYGZgt{}}\PYG{p}{());}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{                }\PYG{n}{levelSets}\PYG{p}{[}\PYG{n}{levelSet}\PYG{p}{].}\PYG{n}{Add}\PYG{p}{((}\PYG{k+kt}{uint}\PYG{p}{)}\PYG{n}{j}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Add the current index}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{uint}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{indices}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{p}{();}
+
+\PYG{+w}{            }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{levelSetNum}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{levelSetNum}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{levelSets}\PYG{p}{.}\PYG{n}{Count}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{levelSetNum}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Go through each level set, finding coordinates that belong to the level set. Start at 1 because the 0 level set is not drawn.}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{levelSets}\PYG{p}{[}\PYG{n}{levelSetNum}\PYG{p}{].}\PYG{n}{Count}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{continue}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// The level set does not exist}
+\PYG{+w}{                }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{levelSets}\PYG{p}{[}\PYG{n}{levelSetNum}\PYG{p}{][}\PYG{l+m}{0}\PYG{p}{];}\PYG{+w}{ }\PYG{c+c1}{// Get the starting height of the level set}
+\PYG{+w}{                }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{targetValue}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{levelSetNum}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{spacingMultiplier}\PYG{p}{;}
+\PYG{+w}{                }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{width}\PYG{o}{\PYGZhy{}}\PYG{l+m}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{p}{(}\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{targetValue}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{contourTolerance}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{o}{!}\PYG{p}{(}\PYG{n}{targetValue}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{contourTolerance}\PYG{p}{))}\PYG{+w}{ }\PYG{c+c1}{// Add in another condition to avoid floating point error (which should be always less than contour tolerance)}
+\PYG{+w}{                    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                        }\PYG{n}{levelSets}\PYG{p}{[}\PYG{n}{levelSetNum}\PYG{p}{].}\PYG{n}{Add}\PYG{p}{((}\PYG{k+kt}{uint}\PYG{p}{)(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{));}
+\PYG{+w}{                        }\PYG{k}{continue}\PYG{p}{;}
+\PYG{+w}{                    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{targetValue}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Possibilities: current value is too big, need to move down; or current value is too small, need to move up. For both cases, either there exists a member of the level set or there does not.}
+\PYG{+w}{                    }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// Stream function greater than target, need to move downwards}
+\PYG{+w}{                        }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{currentHeight}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m}{0}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{targetValue}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{contourTolerance}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// While we are still too big, decrease height until 0}
+\PYG{+w}{                        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                            }\PYG{n}{currentHeight}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{;}
+\PYG{+w}{                        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                        }\PYG{c+c1}{// Now, current height is either larger than target but within tolerance, below target but within tolerance, or neither}
+\PYG{+w}{                        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{targetValue}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{targetValue}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{contourTolerance}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Within tolerance either side of target}
+\PYG{+w}{                        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                            }\PYG{n}{levelSets}\PYG{p}{[}\PYG{n}{levelSetNum}\PYG{p}{].}\PYG{n}{Add}\PYG{p}{((}\PYG{k+kt}{uint}\PYG{p}{)(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{));}
+\PYG{+w}{                        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                        }\PYG{c+c1}{// If it is not within the tolerance, there does not exist a stream function value at this x coordinate in the level set.}
+\PYG{+w}{                    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                    }\PYG{k}{else}\PYG{+w}{ }\PYG{c+c1}{// Current height\PYGZsq{}s contour value is too small}
+\PYG{+w}{                    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                        }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{currentHeight}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{targetValue}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// While we are still too small, increase height until limit}
+\PYG{+w}{                        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                            }\PYG{n}{currentHeight}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{                        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                        }\PYG{c+c1}{// Now, current height is either smaller than target but within tolerance, above target but within tolerance, or neither}
+\PYG{+w}{                        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{targetValue}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{[}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{targetValue}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{contourTolerance}\PYG{p}{)}
+\PYG{+w}{                        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                            }\PYG{n}{levelSets}\PYG{p}{[}\PYG{n}{levelSetNum}\PYG{p}{].}\PYG{n}{Add}\PYG{p}{((}\PYG{k+kt}{uint}\PYG{p}{)(}\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{currentHeight}\PYG{p}{));}
+\PYG{+w}{                        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{n}{indices}\PYG{p}{.}\PYG{n}{AddRange}\PYG{p}{(}\PYG{n}{levelSets}\PYG{p}{[}\PYG{n}{levelSetNum}\PYG{p}{]);}
+\PYG{+w}{                }\PYG{n}{indices}\PYG{p}{.}\PYG{n}{Add}\PYG{p}{(}\PYG{n}{primitiveRestartSentinel}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{.}\PYG{n}{ToArray}\PYG{p}{();}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates an element buffer object, and buffers the indices array.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}indices\PYGZdq{}\PYGZgt{}An array representing the indices of the primitives that are to be drawn.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A handle to the created EBO.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{CreateEBO}\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{EBOHandle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GenBuffer}\PYG{p}{();}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BindBuffer}\PYG{p}{(}\PYG{n}{BufferTarget}\PYG{p}{.}\PYG{n}{ElementArrayBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{EBOHandle}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BufferData}\PYG{p}{(}\PYG{n}{BufferTarget}\PYG{p}{.}\PYG{n}{ElementArrayBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{.}\PYG{n}{Length}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{BufferUsageHint}\PYG{p}{.}\PYG{n}{StaticDraw}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{EBOHandle}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates an element buffer object, and buffers the indices array.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}indices\PYGZdq{}\PYGZgt{}An array representing the indices of the primitives that are to be drawn.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}bufferUsageHint\PYGZdq{}\PYGZgt{}The enum value to tell the GPU which type of memory it should use.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A handle to the created EBO.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{CreateEBO}\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{BufferUsageHint}\PYG{+w}{ }\PYG{n}{bufferUsageHint}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{EBOHandle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GenBuffer}\PYG{p}{();}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BindBuffer}\PYG{p}{(}\PYG{n}{BufferTarget}\PYG{p}{.}\PYG{n}{ElementArrayBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{EBOHandle}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BufferData}\PYG{p}{(}\PYG{n}{BufferTarget}\PYG{p}{.}\PYG{n}{ElementArrayBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{.}\PYG{n}{Length}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{bufferUsageHint}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{EBOHandle}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Buffers new data into the currently bound EBO.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}indices\PYGZdq{}\PYGZgt{}An array representing the indices of the primitives that are to be drawn.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}bufferUsageHint\PYGZdq{}\PYGZgt{}The enum value to tell the GPU which type of memory it should use.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{UpdateEBO}\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{BufferUsageHint}\PYG{+w}{ }\PYG{n}{bufferUsageHint}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BufferData}\PYG{p}{(}\PYG{n}{BufferTarget}\PYG{p}{.}\PYG{n}{ElementArrayBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{.}\PYG{n}{Length}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{bufferUsageHint}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates a vertex array object, which will hold the data to be passed to the vertex shader.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A handle to the created VAO\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{CreateVAO}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{VAOHandle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GenVertexArray}\PYG{p}{();}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BindVertexArray}\PYG{p}{(}\PYG{n}{VAOHandle}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{VAOHandle}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates an attribute pointer, providing metadata to OpenGL when passing data to the vertex shader.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}pointerNumber\PYGZdq{}\PYGZgt{}The number of this pointer \PYGZhy{} this is the number passed to layout in the vertex shader.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}length\PYGZdq{}\PYGZgt{}The dimension of the resulting vector\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}stride\PYGZdq{}\PYGZgt{}The width (in number of floats) of the subsections of the vertex array\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}offset\PYGZdq{}\PYGZgt{}The position (in number of floats) of the first element to include in the resulting vector\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{CreateAttribPointer}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{pointerNumber}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{length}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{stride}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{offset}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{VertexAttribPointer}\PYG{p}{(}\PYG{n}{pointerNumber}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{length}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{VertexAttribPointerType}\PYG{p}{.}\PYG{n}{Float}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{false}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{stride}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{offset}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{));}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{EnableVertexAttribArray}\PYG{p}{(}\PYG{n}{pointerNumber}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates a buffer and binds it.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A handle to the created VBO.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{CreateVBO}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{VBOHandle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GenBuffer}\PYG{p}{();}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BindBuffer}\PYG{p}{(}\PYG{n}{BufferTarget}\PYG{p}{.}\PYG{n}{ArrayBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{VBOHandle}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{VBOHandle}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates a buffer and binds it, filling it with blank data to ensure it is the correct size.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}size\PYGZdq{}\PYGZgt{}The length, in number of floats, of the desired buffer.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A handle to the created VBO.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{CreateVBO}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{VBOHandle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GenBuffer}\PYG{p}{();}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BindBuffer}\PYG{p}{(}\PYG{n}{BufferTarget}\PYG{p}{.}\PYG{n}{ArrayBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{VBOHandle}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BufferData}\PYG{p}{(}\PYG{n}{BufferTarget}\PYG{p}{.}\PYG{n}{ArrayBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{size}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{),}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[}\PYG{n}{size}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{BufferUsageHint}\PYG{p}{.}\PYG{n}{StreamDraw}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{VBOHandle}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Copies a \PYGZlt{}c\PYGZgt{}float[]\PYGZlt{}/c\PYGZgt{} into part of a buffer, starting at \PYGZlt{}paramref name=\PYGZdq{}offset\PYGZdq{}/\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}data\PYGZdq{}\PYGZgt{}The \PYGZlt{}c\PYGZgt{}float[]\PYGZlt{}/c\PYGZgt{} to be copied into the buffer\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}offset\PYGZdq{}\PYGZgt{}The desired index of the first float to be copied\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{BufferSubData}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{offset}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{BufferSubData}\PYG{p}{(}\PYG{n}{BufferTarget}\PYG{p}{.}\PYG{n}{ArrayBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{offset}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{.}\PYG{n}{Length}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Draws the grid, using triangles with indices specified in \PYGZlt{}paramref name=\PYGZdq{}indices\PYGZdq{}/\PYGZgt{}.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}indices\PYGZdq{}\PYGZgt{}An array of unsigned integers specifying the order in which to link vertices together.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}primitiveType\PYGZdq{}\PYGZgt{}Which type of primitive type to use for drawing.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{Draw}\PYG{p}{(}\PYG{k+kt}{uint}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PrimitiveType}\PYG{+w}{ }\PYG{n}{primitiveType}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{DrawElements}\PYG{p}{(}\PYG{n}{primitiveType}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{indices}\PYG{p}{.}\PYG{n}{Length}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{DrawElementsType}\PYG{p}{.}\PYG{n}{UnsignedInt}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

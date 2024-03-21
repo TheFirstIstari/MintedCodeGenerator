@@ -1,0 +1,68 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Globalization}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Linq}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Data}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.Converters}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{AbsoluteRectToRelativePol}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{IMultiValueConverter}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Converts an absolute rectangular coordinate to a relative polar one, relative to a specified canvas dimensions and optionally an origin.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}values\PYGZdq{}\PYGZgt{}3 values: the \PYGZlt{}see cref=\PYGZdq{}Point\PYGZdq{}/\PYGZgt{} to convert, the canvas width and the canvas height.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}parameter\PYGZdq{}\PYGZgt{}An optional origin, specified as a relative \PYGZlt{}see cref=\PYGZdq{}Point\PYGZdq{}/\PYGZgt{} or \PYGZlt{}see cref=\PYGZdq{}string\PYGZdq{}/\PYGZgt{}.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A relative polar coordinate.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n+nf}{Convert}\PYG{p}{(}\PYG{k+kt}{object}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{values}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Type}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{parameter}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{CultureInfo}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{RelativeDimension}\PYG{+w}{ }\PYG{n}{CoordinateConverter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{RelativeDimension}\PYG{p}{();}
+\PYG{+w}{            }\PYG{n}{RectangularToPolar}\PYG{+w}{ }\PYG{n}{RecToPolConverter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{RectangularToPolar}\PYG{p}{();}
+
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{not}\PYG{+w}{ }\PYG{n}{Point}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{not}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{]}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{not}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{point}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Point}\PYG{p}{)}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{];}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{canvasWidth}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{)}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{];}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{canvasHeight}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{)}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{];}
+
+\PYG{+w}{            }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{origin}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Point}\PYG{p}{)}\PYG{n}{parameter}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n}{parameterNoSpaces}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{p}{(((}\PYG{k+kt}{string}\PYG{p}{)}\PYG{n}{parameter}\PYG{p}{).}\PYG{n}{ToCharArray}\PYG{p}{().}\PYG{n}{Where}\PYG{p}{(}\PYG{n}{c}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{o}{!}\PYG{k+kt}{char}\PYG{p}{.}\PYG{n}{IsWhiteSpace}\PYG{p}{(}\PYG{n}{c}\PYG{p}{)).}\PYG{n}{ToArray}\PYG{p}{());}
+\PYG{+w}{                }\PYG{k+kt}{string}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{parameters}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterNoSpaces}\PYG{p}{.}\PYG{n}{Split}\PYG{p}{(}\PYG{l+s+sc}{\PYGZsq{},\PYGZsq{}}\PYG{p}{);}
+
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{k+kt}{double}\PYG{p}{.}\PYG{n}{TryParse}\PYG{p}{(}\PYG{n}{parameters}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{],}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{o}{!}\PYG{k+kt}{double}\PYG{p}{.}\PYG{n}{TryParse}\PYG{p}{(}\PYG{n}{parameters}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{],}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{))}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{xCoordinate}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{.}\PYG{n}{X}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{yCoordinate}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{.}\PYG{n}{Y}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{;}
+
+
+\PYG{+w}{            }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{relativePoint}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}
+\PYG{+w}{                }\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{)}\PYG{n}{CoordinateConverter}\PYG{p}{.}\PYG{n}{ConvertBack}\PYG{p}{(}\PYG{n}{canvasWidth}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{xCoordinate}\PYG{p}{.}\PYG{n}{ToString}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{),}
+\PYG{+w}{                }\PYG{l+m}{1}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{)}\PYG{n}{CoordinateConverter}\PYG{p}{.}\PYG{n}{ConvertBack}\PYG{p}{(}\PYG{n}{canvasHeight}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{yCoordinate}\PYG{p}{.}\PYG{n}{ToString}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{));}\PYG{+w}{ }\PYG{c+c1}{// Flip the y coordinate about the centre of the canvas to make it 0 at the bottom rather than at the top.}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{RecToPolConverter}\PYG{p}{.}\PYG{n}{Convert}\PYG{p}{(}\PYG{n}{relativePoint}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{origin}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{p}{[]}\PYG{+w}{ }\PYG{n+nf}{ConvertBack}\PYG{p}{(}\PYG{k+kt}{object}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Type}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{targetTypes}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{parameter}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{CultureInfo}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Use RelativePolToAbsoluteRect instead.\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,60 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.HelperClasses}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{c+c1}{/// Represents a point defined by polar coordinates.}
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{c+c1}{/// Represents a point defined by polar coordinates.}
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{PolarPoint}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{IComparable}\PYG{o}{\PYGZlt{}}\PYG{n}{PolarPoint}\PYG{o}{\PYGZgt{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{IEquatable}\PYG{o}{\PYGZlt{}}\PYG{n}{PolarPoint}\PYG{o}{\PYGZgt{}}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// The distance from the origin to the point.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{Radius}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// The angle, in radians, with respect to a right\PYGZhy{}facing initial line.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{Angle}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// The angle, in degrees, with respect to a right\PYGZhy{}facing initial line.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{DegreesAngle}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{get}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{Angle}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{180}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n}{PI}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Creates a polar point with a given radius and angle.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}radius\PYGZdq{}\PYGZgt{}The distance from the origin to the point.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}angle\PYGZdq{}\PYGZgt{}The angle, in radians, with respect to a right\PYGZhy{}facing initial line.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{n+nf}{PolarPoint}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{radius}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{angle}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{Radius}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{radius}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{Angle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{angle}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{CompareTo}\PYG{p}{(}\PYG{n}{PolarPoint}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{other}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Angle}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{other}\PYG{o}{?.}\PYG{n}{Angle}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// If same angle, sort on radius}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{Radius}\PYG{p}{.}\PYG{n}{CompareTo}\PYG{p}{(}\PYG{n}{other}\PYG{p}{.}\PYG{n}{Radius}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{Angle}\PYG{p}{.}\PYG{n}{CompareTo}\PYG{p}{(}\PYG{n}{other}\PYG{o}{?.}\PYG{n}{Angle}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n+nf}{Equals}\PYG{p}{(}\PYG{n}{PolarPoint}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{other}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{Radius}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{other}\PYG{o}{?.}\PYG{n}{Radius}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{Angle}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{other}\PYG{o}{?.}\PYG{n}{Angle}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{override}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n+nf}{ToString}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{l+s}{\PYGZdl{}\PYGZdq{}\PYGZob{}Radius\PYGZcb{}, \PYGZob{}Angle\PYGZcb{}\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

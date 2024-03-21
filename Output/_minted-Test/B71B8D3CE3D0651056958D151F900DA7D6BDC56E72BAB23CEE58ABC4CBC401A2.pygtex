@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Controls}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{UserInterface.HelperClasses}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{UserInterface.ViewModels}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.Views}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{c+c1}{/// Interaction logic for AdvancedParameters.xaml}
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{partial}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{AdvancedParameters}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{UserControl}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{n+nf}{AdvancedParameters}\PYG{p}{(}\PYG{n}{ParameterHolder}\PYG{+w}{ }\PYG{n}{parameterHolder}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Sets the parameter holder}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{InitializeComponent}\PYG{p}{();}
+\PYG{+w}{            }\PYG{n}{DataContext}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{AdvancedParametersVM}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

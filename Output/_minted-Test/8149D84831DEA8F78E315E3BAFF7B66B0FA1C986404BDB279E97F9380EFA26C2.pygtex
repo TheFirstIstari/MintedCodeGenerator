@@ -1,0 +1,108 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{OpenTK.Graphics.OpenGL4}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{Visualisation}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{ShaderManager}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{IDisposable}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{programHandle}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{isDisposed}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{false}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{Handle}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{get}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{programHandle}\PYG{p}{;}\PYG{+w}{ }\PYG{k}{set}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{programHandle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{ExtractShaderSource}\PYG{p}{(}\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n}{path}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ShaderType}\PYG{+w}{ }\PYG{n}{type}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{shaderHandle}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n}{shaderSource}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{File}\PYG{p}{.}\PYG{n}{ReadAllText}\PYG{p}{(}\PYG{n}{path}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{shaderHandle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{CreateShader}\PYG{p}{(}\PYG{n}{type}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{ShaderSource}\PYG{p}{(}\PYG{n}{shaderHandle}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{shaderSource}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{CompileShader}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{shaderHandle}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{CompileShader}\PYG{p}{(}\PYG{n}{shaderHandle}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GetShader}\PYG{p}{(}\PYG{n}{shaderHandle}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ShaderParameter}\PYG{p}{.}\PYG{n}{CompileStatus}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{success}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{success}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Error in compilation}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{Console}\PYG{p}{.}\PYG{n}{WriteLine}\PYG{p}{(}\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GetShaderInfoLog}\PYG{p}{(}\PYG{n}{shaderHandle}\PYG{p}{));}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{LinkShaders}\PYG{p}{(}\PYG{k+kt}{int}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{shaderHandles}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{programHandle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{CreateProgram}\PYG{p}{();}
+
+\PYG{+w}{            }\PYG{k}{foreach}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{shaderHandle}\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }\PYG{n}{shaderHandles}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{AttachShader}\PYG{p}{(}\PYG{n}{programHandle}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{shaderHandle}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{LinkProgram}\PYG{p}{(}\PYG{n}{programHandle}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GetProgram}\PYG{p}{(}\PYG{n}{programHandle}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{GetProgramParameterName}\PYG{p}{.}\PYG{n}{LinkStatus}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{success}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{success}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Error case}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{Console}\PYG{p}{.}\PYG{n}{WriteLine}\PYG{p}{(}\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GetProgramInfoLog}\PYG{p}{(}\PYG{n}{programHandle}\PYG{p}{));}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{BuildProgram}\PYG{p}{((}\PYG{k+kt}{string}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ShaderType}\PYG{p}{)[]}\PYG{+w}{ }\PYG{n}{shadersWithPaths}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{handles}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{p}{[}\PYG{n}{shadersWithPaths}\PYG{p}{.}\PYG{n}{Length}\PYG{p}{];}
+\PYG{+w}{            }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{shadersWithPaths}\PYG{p}{.}\PYG{n}{Length}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{ExtractShaderSource}\PYG{p}{(}\PYG{n}{shadersWithPaths}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{Item1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{shadersWithPaths}\PYG{p}{[}\PYG{n}{i}\PYG{p}{].}\PYG{n}{Item2}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{n}{handles}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+\PYG{+w}{                }\PYG{n}{CompileShader}\PYG{p}{(}\PYG{n}{handles}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{LinkShaders}\PYG{p}{(}\PYG{n}{handles}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{k}{foreach}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{shaderHandle}\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }\PYG{n}{handles}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{DetachShader}\PYG{p}{(}\PYG{n}{programHandle}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{shaderHandle}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{DeleteShader}\PYG{p}{(}\PYG{n}{shaderHandle}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{n+nf}{ShaderManager}\PYG{p}{((}\PYG{k+kt}{string}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ShaderType}\PYG{p}{)[]}\PYG{+w}{ }\PYG{n}{shadersWithPaths}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{BuildProgram}\PYG{p}{(}\PYG{n}{shadersWithPaths}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{o}{\PYGZti{}}\PYG{n}{ShaderManager}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{isDisposed}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{Console}\PYG{p}{.}\PYG{n}{WriteLine}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Object not disposed of correctly\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Object was not disposed of correctly.\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{Use}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{UseProgram}\PYG{p}{(}\PYG{n}{programHandle}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{GetUniformLocation}\PYG{p}{(}\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n}{uniformName}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{GetUniformLocation}\PYG{p}{(}\PYG{n}{programHandle}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{uniformName}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{SetUniform}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{uniformLocation}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{Uniform1}\PYG{p}{(}\PYG{n}{uniformLocation}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{Dispose}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{isDisposed}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{GL}\PYG{p}{.}\PYG{n}{DeleteProgram}\PYG{p}{(}\PYG{n}{programHandle}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{isDisposed}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{true}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{n}{GC}\PYG{p}{.}\PYG{n}{SuppressFinalize}\PYG{p}{(}\PYG{k}{this}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,103 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Globalization}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Linq}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Data}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{UserInterface.HelperClasses}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.Converters}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{c+c1}{/// Converter class that can convert rectangular to polar and back again with respect to a given pole.}
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{RectangularToPolar}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{IValueConverter}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Converts a rectangular coordinate to a polar coordinate, with the pole to use optionally specified in rectangular coordinates in \PYGZlt{}paramref name=\PYGZdq{}parameter\PYGZdq{}/\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}value\PYGZdq{}\PYGZgt{}The rectangular coordinate, as a \PYGZlt{}see cref=\PYGZdq{}Point\PYGZdq{}/\PYGZgt{}.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}parameter\PYGZdq{}\PYGZgt{}The pole to use in the conversion (as a rectangular \PYGZlt{}see cref=\PYGZdq{}Point\PYGZdq{}/\PYGZgt{} or \PYGZlt{}see cref=\PYGZdq{}string\PYGZdq{}/\PYGZgt{}), or \PYGZlt{}see cref=\PYGZdq{}null\PYGZdq{}/\PYGZgt{} to use (0, 0).\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A \PYGZlt{}see cref=\PYGZdq{}PolarPoint\PYGZdq{}/\PYGZgt{} representing the converted coordinate.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n+nf}{Convert}\PYG{p}{(}\PYG{k+kt}{object}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Type}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{parameter}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{CultureInfo}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{value}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{not}\PYG{+w}{ }\PYG{n}{Point}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{o}{!}\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{Point}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{))}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{point}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Point}\PYG{p}{)}\PYG{k}{value}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{origin}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Point}\PYG{p}{)}\PYG{n}{parameter}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n}{parameterNoSpaces}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{p}{(((}\PYG{k+kt}{string}\PYG{p}{)}\PYG{n}{parameter}\PYG{p}{).}\PYG{n}{ToCharArray}\PYG{p}{().}\PYG{n}{Where}\PYG{p}{(}\PYG{n}{c}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{o}{!}\PYG{k+kt}{char}\PYG{p}{.}\PYG{n}{IsWhiteSpace}\PYG{p}{(}\PYG{n}{c}\PYG{p}{)).}\PYG{n}{ToArray}\PYG{p}{());}
+\PYG{+w}{                }\PYG{k+kt}{string}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{parameters}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterNoSpaces}\PYG{p}{.}\PYG{n}{Split}\PYG{p}{(}\PYG{l+s+sc}{\PYGZsq{},\PYGZsq{}}\PYG{p}{);}
+
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{k+kt}{double}\PYG{p}{.}\PYG{n}{TryParse}\PYG{p}{(}\PYG{n}{parameters}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{],}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{o}{!}\PYG{k+kt}{double}\PYG{p}{.}\PYG{n}{TryParse}\PYG{p}{(}\PYG{n}{parameters}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{],}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{))}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{c+c1}{// parameter is null}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Origin not specified \PYGZhy{} use default.}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{Vector}\PYG{+w}{ }\PYG{n}{distFromOrigin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{point}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{origin}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{angle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n}{Atan2}\PYG{p}{(}\PYG{n}{distFromOrigin}\PYG{p}{.}\PYG{n}{Y}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{distFromOrigin}\PYG{p}{.}\PYG{n}{X}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Range \PYGZhy{}pi to pi.}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{angle}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Make the range 0 to 2 pi}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{angle}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n}{PI}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{PolarPoint}\PYG{p}{(}\PYG{n}{distFromOrigin}\PYG{p}{.}\PYG{n}{Length}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{angle}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// This is the only line that actually converts a rectangular coordinate to a polar one.}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Converts a polar coordinate to a rectangular coordinate, with the pole to use optionally specified in rectangular coordinates in \PYGZlt{}paramref name=\PYGZdq{}parameter\PYGZdq{}/\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}value\PYGZdq{}\PYGZgt{}The polar coordinate, as a \PYGZlt{}see cref=\PYGZdq{}PolarPoint\PYGZdq{}/\PYGZgt{}.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}parameter\PYGZdq{}\PYGZgt{}The pole to use in the conversion (as a rectangular \PYGZlt{}see cref=\PYGZdq{}Point\PYGZdq{}/\PYGZgt{} or \PYGZlt{}see cref=\PYGZdq{}string\PYGZdq{}/\PYGZgt{}), or \PYGZlt{}see cref=\PYGZdq{}null\PYGZdq{}/\PYGZgt{} to use (0, 0).\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A \PYGZlt{}see cref=\PYGZdq{}Point\PYGZdq{}/\PYGZgt{} representing the converted coordinate.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n+nf}{ConvertBack}\PYG{p}{(}\PYG{k+kt}{object}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Type}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{parameter}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{CultureInfo}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{value}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{not}\PYG{+w}{ }\PYG{n}{PolarPoint}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{o}{!}\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{Point}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{))}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{PolarPoint}\PYG{+w}{ }\PYG{n}{point}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{PolarPoint}\PYG{p}{)}\PYG{k}{value}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{origin}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Point}\PYG{p}{)}\PYG{n}{parameter}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n}{parameterNoSpaces}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{p}{(((}\PYG{k+kt}{string}\PYG{p}{)}\PYG{n}{parameter}\PYG{p}{).}\PYG{n}{ToCharArray}\PYG{p}{().}\PYG{n}{Where}\PYG{p}{(}\PYG{n}{c}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{o}{!}\PYG{k+kt}{char}\PYG{p}{.}\PYG{n}{IsWhiteSpace}\PYG{p}{(}\PYG{n}{c}\PYG{p}{)).}\PYG{n}{ToArray}\PYG{p}{());}
+\PYG{+w}{                }\PYG{k+kt}{string}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{parameters}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterNoSpaces}\PYG{p}{.}\PYG{n}{Split}\PYG{p}{(}\PYG{l+s+sc}{\PYGZsq{},\PYGZsq{}}\PYG{p}{);}
+
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{k+kt}{double}\PYG{p}{.}\PYG{n}{TryParse}\PYG{p}{(}\PYG{n}{parameters}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{],}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{o}{!}\PYG{k+kt}{double}\PYG{p}{.}\PYG{n}{TryParse}\PYG{p}{(}\PYG{n}{parameters}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{],}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{))}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{c+c1}{// parameter is null}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Origin not specified \PYGZhy{} use default.}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{Vector}\PYG{+w}{ }\PYG{n}{distanceFromOrigin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Vector}\PYG{p}{(}\PYG{n}{point}\PYG{p}{.}\PYG{n}{Radius}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n}{Cos}\PYG{p}{(}\PYG{n}{point}\PYG{p}{.}\PYG{n}{Angle}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{.}\PYG{n}{Radius}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{Math}\PYG{p}{.}\PYG{n}{Sin}\PYG{p}{(}\PYG{n}{point}\PYG{p}{.}\PYG{n}{Angle}\PYG{p}{));}\PYG{+w}{ }\PYG{c+c1}{// Convert the polar coordinate to a rectangular vector.}
+
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{distanceFromOrigin}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Translate the origin by the vector to get the final rectangular point.}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,248 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}pch.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}BackendCoordinator.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}PipeConstants.h\PYGZdq{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}iostream\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}define OBSTACLES}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{BackendCoordinator::UnflattenArray}\PYG{p}{(}\PYG{k+kt}{bool}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{pointerArray}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{flattenedArray}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{length}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{divisions}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{length}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{divisions}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{++}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+
+\PYG{+w}{        }\PYG{n}{memcpy}\PYG{p}{(}
+\PYG{+w}{            }\PYG{n}{pointerArray}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],}\PYG{+w}{                }\PYG{c+c1}{// Destination address \PYGZhy{} address at ith pointer}
+\PYG{+w}{            }\PYG{n}{flattenedArray}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{divisions}\PYG{p}{,}\PYG{+w}{ }\PYG{c+c1}{// Source start address \PYGZhy{} move (i * divisions) each iteration}
+\PYG{+w}{            }\PYG{n}{divisions}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{bool}\PYG{p}{)}\PYG{+w}{        }\PYG{c+c1}{// Bytes to copy \PYGZhy{} divisions}
+\PYG{+w}{        }\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{BackendCoordinator::HandleRequest}\PYG{p}{(}\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{requestByte}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Starting execution of timestepping loop}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Request}\PYG{o}{::}\PYG{n}{PARAMMASK}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Request}\PYG{o}{::}\PYG{n}{CONTREQ}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Request}\PYG{o}{::}\PYG{n}{CONTREQ}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Error}\PYG{o}{::}\PYG{n}{BADPARAM}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cerr}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Server sent a blank request, exiting\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{return}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{hVelWanted}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Request}\PYG{o}{::}\PYG{n}{HVEL}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{vVelWanted}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Request}\PYG{o}{::}\PYG{n}{VVEL}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{pressureWanted}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Request}\PYG{o}{::}\PYG{n}{PRES}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{streamWanted}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Request}\PYG{o}{::}\PYG{n}{STRM}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{closeRequested}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{false}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Status}\PYG{o}{::}\PYG{n}{OK}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Send OK to say backend is set up and about to start executing}
+
+\PYG{+w}{        }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iteration}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{cumulativeTimestep}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{PerformSetup}\PYG{p}{();}
+\PYG{+w}{        }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{closeRequested}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Iteration \PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{iteration}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}, \PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{n}{cumulativeTimestep}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{} seconds passed. }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{ITERSTART}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{Timestep}\PYG{p}{(}\PYG{n}{cumulativeTimestep}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetIMax}\PYG{p}{();}
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetJMax}\PYG{p}{();}
+
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{hVelWanted}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDSTART}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{HVEL}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendField}\PYG{p}{(}\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetHorizontalVelocity}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDEND}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{HVEL}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{vVelWanted}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDSTART}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{VVEL}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendField}\PYG{p}{(}\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetVerticalVelocity}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDEND}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{VVEL}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pressureWanted}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDSTART}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{PRES}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendField}\PYG{p}{(}\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetPressure}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDEND}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{PRES}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{streamWanted}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDSTART}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{STRM}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendField}\PYG{p}{(}\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetStreamFunction}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDEND}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{STRM}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{ITEREND}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadByte}\PYG{p}{();}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Status}\PYG{o}{::}\PYG{n}{STOP}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// Stop means just wait for the next read}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Status}\PYG{o}{::}\PYG{n}{OK}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Backend paused.}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadByte}\PYG{p}{();}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Status}\PYG{o}{::}\PYG{n}{CLOSE}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Error}\PYG{o}{::}\PYG{n}{INTERNAL}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{closeRequested}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{true}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Stop if requested or the frontend fatally errors}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// Anything other than a CLOSE request}
+\PYG{+w}{                }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{PRMMASK}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{PRMSTART}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDSTART}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{OBST}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// While the received byte is a PRMSTART or obstacle send...}
+\PYG{+w}{                    }\PYG{n}{ReceiveData}\PYG{p}{(}\PYG{n}{receivedByte}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// ...pass the received byte to ReceiveData to handle parameter reading...}
+\PYG{+w}{                    }\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadByte}\PYG{p}{();}\PYG{+w}{ }\PYG{c+c1}{// ...then read the next byte}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Status}\PYG{o}{::}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// Require an OK at the end, whether parameters were sent or not}
+\PYG{+w}{                    }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cerr}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Server sent malformed data}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{                    }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Error}\PYG{o}{::}\PYG{n}{BADREQ}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{iteration}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Backend stopped.}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Status}\PYG{o}{::}\PYG{n}{OK}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Send OK then stop executing}
+
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// Only continuous requests are supported}
+\PYG{+w}{        }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cerr}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Server sent an unsupported request}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Error}\PYG{o}{::}\PYG{n}{BADREQ}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{BackendCoordinator::ReceiveObstacles}\PYG{p}{()}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetIMax}\PYG{p}{();}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetJMax}\PYG{p}{();}
+\PYG{+w}{    }\PYG{k+kt}{bool}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{obstaclesFlattened}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{p}{[(}\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{jMax}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)]();}
+\PYG{+w}{    }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReceiveObstacles}\PYG{p}{(}\PYG{n}{obstaclesFlattened}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{jMax}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k+kt}{bool}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{obstacles}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetObstacles}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{UnflattenArray}\PYG{p}{(}\PYG{n}{obstacles}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{obstaclesFlattened}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{jMax}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{jMax}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{delete}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{obstaclesFlattened}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{BackendCoordinator::ReceiveParameters}\PYG{p}{(}\PYG{k}{const}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{parameterBits}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{SimulationParameters}\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{parameters}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameterBits}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{ITERMAX}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{pressureMaxIterations}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadInt}\PYG{p}{();}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadReal}\PYG{p}{();}\PYG{+w}{ }\PYG{c+c1}{// All of the other possible parameters have the data type REAL, so read the pipe and convert it to a REAL beforehand}
+\PYG{+w}{        }\PYG{k}{switch}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameterBits}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// AND the start marker with the parameter mask to see which parameter is sent}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{WIDTH}\PYG{p}{:}
+\PYG{+w}{            }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{width}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{HEIGHT}\PYG{p}{:}
+\PYG{+w}{            }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{TAU}\PYG{p}{:}
+\PYG{+w}{            }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{timeStepSafetyFactor}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{OMEGA}\PYG{p}{:}
+\PYG{+w}{            }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{relaxationParameter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{RMAX}\PYG{p}{:}
+\PYG{+w}{            }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{pressureResidualTolerance}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{REYNOLDS}\PYG{p}{:}
+\PYG{+w}{            }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{reynoldsNo}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{INVEL}\PYG{p}{:}
+\PYG{+w}{            }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{inflowVelocity}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{CHI}\PYG{p}{:}
+\PYG{+w}{            }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{surfaceFrictionalPermissibility}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{MU}\PYG{p}{:}
+\PYG{+w}{            }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{dynamicViscosity}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{default}\PYG{o}{:}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{BackendCoordinator::ReceiveData}\PYG{p}{(}\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{startMarker}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{startMarker}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{FLDSTART}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{OBST}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// Obstacles have a separate handler}
+\PYG{+w}{        }\PYG{n}{ReceiveObstacles}\PYG{p}{();}
+\PYG{+w}{        }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{ProcessObstacles}\PYG{p}{();}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{else}\PYG{+w}{ }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{startMarker}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{PRMMASK}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{PRMSTART}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// Check if startMarker is a PRMSTART by ANDing it with the inverse of the parameter mask}
+\PYG{+w}{        }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{parameterBits}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{startMarker}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{PRMMASK}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{SimulationParameters}\PYG{+w}{ }\PYG{n}{parameters}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetParameters}\PYG{p}{();}
+\PYG{+w}{        }\PYG{n}{ReceiveParameters}\PYG{p}{(}\PYG{n}{parameterBits}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{parameters}\PYG{p}{);}
+
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadByte}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Marker}\PYG{o}{::}\PYG{n}{PRMEND}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{parameterBits}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// Need to receive the corresponding PRMEND}
+\PYG{+w}{            }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cerr}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Server sent malformed data}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Error}\PYG{o}{::}\PYG{n}{BADREQ}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{SetParameters}\PYG{p}{(}\PYG{n}{parameters}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Status}\PYG{o}{::}\PYG{n}{OK}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Send an OK to say parameters were received correctly}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cerr}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Server sent unsupported data}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Error}\PYG{o}{::}\PYG{n}{BADREQ}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Error if the start marker was unrecognised.}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{BackendCoordinator::SetDefaultParameters}\PYG{p}{(}\PYG{n}{SimulationParameters}\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{parameters}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{width}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{height}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{timeStepSafetyFactor}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{REAL}\PYG{p}{)}\PYG{l+m+mf}{0.5}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{relaxationParameter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{REAL}\PYG{p}{)}\PYG{l+m+mf}{1.7}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{pressureResidualTolerance}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{pressureMinIterations}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{pressureMaxIterations}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1000}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{reynoldsNo}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{2000}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{dynamicViscosity}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{REAL}\PYG{p}{)}\PYG{l+m+mf}{0.00001983}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{inflowVelocity}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{surfaceFrictionalPermissibility}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{bodyForces}\PYG{p}{.}\PYG{n}{x}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{parameters}\PYG{p}{.}\PYG{n}{bodyForces}\PYG{p}{.}\PYG{n}{y}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{BackendCoordinator}\PYG{o}{::}\PYG{n}{BackendCoordinator}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{+w}{ }\PYG{n}{pipeName}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Solver}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{solver}\PYG{p}{)}
+\PYG{+w}{    }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{(}\PYG{n}{pipeName}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{solver}\PYG{p}{(}\PYG{n}{solver}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{SimulationParameters}\PYG{+w}{ }\PYG{n}{parameters}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{SimulationParameters}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{SetDefaultParameters}\PYG{p}{(}\PYG{n}{parameters}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{SetParameters}\PYG{p}{(}\PYG{n}{parameters}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{BackendCoordinator}\PYG{o}{::}\PYG{n}{Run}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{Handshake}\PYG{p}{(}\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetIMax}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{solver}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{GetJMax}\PYG{p}{());}
+\PYG{+w}{    }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Handshake completed ok}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{closeRequested}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{false}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{closeRequested}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}In read loop}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadByte}\PYG{p}{();}
+\PYG{+w}{        }\PYG{k}{switch}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{CATEGORYMASK}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{c+c1}{// Gets the category of control byte}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Status}\PYG{o}{::}\PYG{n+no}{GENERIC}\PYG{p}{:}\PYG{+w}{ }\PYG{c+c1}{// Status bytes}
+\PYG{+w}{            }\PYG{k}{switch}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Status}\PYG{o}{::}\PYG{n}{PARAMMASK}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Status}\PYG{o}{::}\PYG{n+no}{HELLO}\PYG{p}{:}
+\PYG{+w}{            }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Status}\PYG{o}{::}\PYG{n+no}{BUSY}\PYG{p}{:}
+\PYG{+w}{            }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Status}\PYG{o}{::}\PYG{n+no}{OK}\PYG{p}{:}
+\PYG{+w}{            }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Status}\PYG{o}{::}\PYG{n+no}{STOP}\PYG{p}{:}
+\PYG{+w}{                }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cerr}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Server sent a status byte out of sequence, request not understood}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Error}\PYG{o}{::}\PYG{n}{BADREQ}\PYG{p}{);}
+\PYG{+w}{                }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Status}\PYG{o}{::}\PYG{n+no}{CLOSE}\PYG{p}{:}
+\PYG{+w}{                }\PYG{n}{closeRequested}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{true}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Status}\PYG{o}{::}\PYG{n}{OK}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cout}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Backend closing...}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{default}\PYG{o}{:}
+\PYG{+w}{                }\PYG{n}{std}\PYG{o}{::}\PYG{n}{cerr}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZlt{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Server sent a malformed status byte, request not understood}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{o}{::}\PYG{n}{Error}\PYG{o}{::}\PYG{n}{BADREQ}\PYG{p}{);}
+\PYG{+w}{                }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Request}\PYG{o}{::}\PYG{n+no}{GENERIC}\PYG{p}{:}\PYG{+w}{ }\PYG{c+c1}{// Request bytes have a separate handler}
+\PYG{+w}{            }\PYG{n}{HandleRequest}\PYG{p}{(}\PYG{n}{receivedByte}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{case}\PYG{+w}{ }\PYG{n+no}{PipeConstants}\PYG{o}{::}\PYG{n+no}{Marker}\PYG{o}{::}\PYG{n+no}{GENERIC}\PYG{p}{:}\PYG{+w}{ }\PYG{c+c1}{// So do marker bytes}
+\PYG{+w}{            }\PYG{n}{ReceiveData}\PYG{p}{(}\PYG{n}{receivedByte}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{default}\PYG{o}{:}\PYG{+w}{ }\PYG{c+c1}{// Error bytes}
+\PYG{+w}{            }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

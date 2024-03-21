@@ -1,0 +1,120 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Controls}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Input}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Media}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Shapes}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.HelperControls}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{VisualPoint}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{Shape}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{defaultCircleRadiusRatio}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{3}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{hoverCircleRadiusRatio}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{size}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{const}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{aspectRatio}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{)}\PYG{l+m}{9}\PYG{o}{/}\PYG{l+m}{16}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{n}{DrawingBrush}\PYG{+w}{ }\PYG{n}{defaultFill}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{n}{DrawingBrush}\PYG{+w}{ }\PYG{n}{mouseHoverFill}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{isDragged}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{protected}\PYG{+w}{ }\PYG{k}{override}\PYG{+w}{ }\PYG{n}{Geometry}\PYG{+w}{ }\PYG{n}{DefiningGeometry}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{EllipseGeometry}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{size}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{aspectRatio}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{);}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{Point}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{get}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{set}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{point}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{Canvas}\PYG{p}{.}\PYG{n}{SetLeft}\PYG{p}{(}\PYG{k}{this}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{.}\PYG{n}{X}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{size}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{aspectRatio}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{Canvas}\PYG{p}{.}\PYG{n}{SetBottom}\PYG{p}{(}\PYG{k}{this}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{.}\PYG{n}{Y}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{size}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{IsDragged}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{get}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{isDragged}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{set}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{isDragged}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{OnIsDraggedChanged}\PYG{p}{();}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{n+nf}{VisualPoint}\PYG{p}{(}\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{defaultFill}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{DrawingBrush}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{DrawingGroup}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{Children}\PYG{+w}{ }\PYG{o}{=}
+\PYG{+w}{                }\PYG{n+na}{[}
+\PYG{n+na}{                    new GeometryDrawing // Outer circle}
+\PYG{n+na}{                    \PYGZob{}}
+\PYG{n+na}{                        Brush = Brushes.DarkGreen,}
+\PYG{n+na}{                        Geometry = new EllipseGeometry(new Point(0, 0), aspectRatio * defaultCircleRadiusRatio, defaultCircleRadiusRatio)}
+\PYG{n+na}{                    \PYGZcb{},}
+\PYG{n+na}{                    new GeometryDrawing // Inner, darker circle}
+\PYG{n+na}{                    \PYGZob{}}
+\PYG{n+na}{                        Brush = Brushes.LightGreen,}
+\PYG{n+na}{                        Geometry = new EllipseGeometry(new Point(0, 0), aspectRatio, 1)}
+\PYG{n+na}{                    \PYGZcb{}}
+\PYG{n+na}{                ]}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{});}
+
+\PYG{+w}{            }\PYG{n}{mouseHoverFill}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{DrawingBrush}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{DrawingGroup}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{Children}\PYG{+w}{ }\PYG{o}{=}
+\PYG{+w}{                }\PYG{n+na}{[}
+\PYG{n+na}{                    new GeometryDrawing // Outer circle}
+\PYG{n+na}{                    \PYGZob{}}
+\PYG{n+na}{                        Brush = Brushes.DarkGreen,}
+\PYG{n+na}{                        Geometry = new EllipseGeometry(new Point(0, 0), aspectRatio * hoverCircleRadiusRatio, hoverCircleRadiusRatio)}
+\PYG{n+na}{                    \PYGZcb{},}
+\PYG{n+na}{                    new GeometryDrawing // Inner, darker circle}
+\PYG{n+na}{                    \PYGZob{}}
+\PYG{n+na}{                        Brush = Brushes.LightGreen,}
+\PYG{n+na}{                        Geometry = new EllipseGeometry(new Point(0, 0), aspectRatio, 1)}
+\PYG{n+na}{                    \PYGZcb{}}
+\PYG{n+na}{                ]}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{});}
+
+\PYG{+w}{            }\PYG{n}{isDragged}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{false}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{n}{MouseEnter}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{OnMouseEnter}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{MouseLeave}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{OnMouseLeave}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{n}{Fill}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{defaultFill}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{Point}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{n+nf}{VisualPoint}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{n+nf}{VisualPoint}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{k}{this}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{OnIsDraggedChanged}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{isDragged}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Dragging has just started}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{MouseEnter}\PYG{+w}{ }\PYG{o}{\PYGZhy{}=}\PYG{+w}{ }\PYG{n}{OnMouseEnter}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{MouseLeave}\PYG{+w}{ }\PYG{o}{\PYGZhy{}=}\PYG{+w}{ }\PYG{n}{OnMouseLeave}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{Fill}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{mouseHoverFill}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{c+c1}{// Dragging has just ended}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{MouseEnter}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{OnMouseEnter}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{MouseLeave}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{OnMouseLeave}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{Fill}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{defaultFill}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{OnMouseEnter}\PYG{p}{(}\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{sender}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{MouseEventArgs}\PYG{+w}{ }\PYG{n}{e}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{Fill}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{mouseHoverFill}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{OnMouseLeave}\PYG{p}{(}\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{sender}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{MouseEventArgs}\PYG{+w}{ }\PYG{n}{e}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{Fill}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{defaultFill}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{override}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n+nf}{ToString}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{.}\PYG{n}{ToString}\PYG{p}{();}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

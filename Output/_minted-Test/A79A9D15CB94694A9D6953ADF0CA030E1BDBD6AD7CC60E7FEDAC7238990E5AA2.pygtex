@@ -1,0 +1,75 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}ifndef DEFINITIONS\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define DEFINITIONS\PYGZus{}H}
+
+\PYG{k}{typedef}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{REAL}\PYG{p}{;}
+\PYG{k}{typedef}\PYG{+w}{ }\PYG{k+kt}{unsigned}\PYG{+w}{ }\PYG{k+kr}{\PYGZus{}\PYGZus{}int8}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{p}{;}
+
+\PYG{c+c1}{// Definitions for boundary cells. For the last 5 bits, format is [self] [north] [east] [south] [west]}
+\PYG{c+c1}{// Where 1 means the corresponding cell is fluid, and 0 means the corresponding cell is obstacle.}
+\PYG{c+c1}{// Boundary cells are defined as obstacle cells with fluid on 1 side or 2 adjacent sides}
+\PYG{c+c1}{// For fluid cells, XOR the corresponding inverse boundary with FLUID.}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{B\PYGZus{}N}\PYG{+w}{   }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00001000}\PYG{p}{;}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{B\PYGZus{}NE}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00001100}\PYG{p}{;}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{B\PYGZus{}E}\PYG{+w}{   }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00000100}\PYG{p}{;}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{B\PYGZus{}SE}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00000110}\PYG{p}{;}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{B\PYGZus{}S}\PYG{+w}{   }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00000010}\PYG{p}{;}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{B\PYGZus{}SW}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00000011}\PYG{p}{;}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{B\PYGZus{}W}\PYG{+w}{   }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00000001}\PYG{p}{;}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{B\PYGZus{}NW}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00001001}\PYG{p}{;}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{OBS}\PYG{+w}{   }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00000000}\PYG{p}{;}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{FLUID}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00011111}\PYG{p}{;}
+
+\PYG{c+c1}{// Constants used for parsing of flags.}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{SELF}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00010000}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// SELF bit}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{NORTH}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00001000}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// NORTH bit}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{EAST}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00000100}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// EAST bit}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{SOUTH}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00000010}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// SOUTH bit}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{WEST}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mb}{0b00000001}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// WEST bit}
+
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{SELFSHIFT}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Amount to shift for SELF bit at LSB.}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{NORTHSHIFT}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Amount to shift for NORTH bit at LSB.}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{EASTSHIFT}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Amount to shift for EAST bit at LSB.}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{SOUTHSHIFT}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Amount to shift for SOUTH bit at LSB.}
+\PYG{k}{constexpr}\PYG{+w}{ }\PYG{n}{BYTE}\PYG{+w}{ }\PYG{n}{WESTSHIFT}\PYG{+w}{  }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Amount to shift for WEST bit at LSB.}
+
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{DoubleField}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{o}{**}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{DoubleReal}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{x}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{y}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{SimulationParameters}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{width}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{height}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{timeStepSafetyFactor}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{relaxationParameter}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{pressureResidualTolerance}\PYG{p}{;}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{pressureMinIterations}\PYG{p}{;}
+\PYG{+w}{	}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{pressureMaxIterations}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{reynoldsNo}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{dynamicViscosity}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{inflowVelocity}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{surfaceFrictionalPermissibility}\PYG{p}{;}
+\PYG{+w}{	}\PYG{n}{DoubleReal}\PYG{+w}{ }\PYG{n}{bodyForces}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{ThreadStatus}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{	}\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{running}\PYG{p}{;}
+\PYG{+w}{	}\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{startNextIterationRequested}\PYG{p}{;}
+\PYG{+w}{	}\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{stopRequested}\PYG{p}{;}
+
+\PYG{+w}{	}\PYG{n}{ThreadStatus}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{running}\PYG{p}{(}\PYG{n+nb}{false}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{startNextIterationRequested}\PYG{p}{(}\PYG{n+nb}{false}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{stopRequested}\PYG{p}{(}\PYG{n+nb}{false}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{// Constructor just sets everything to false.}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

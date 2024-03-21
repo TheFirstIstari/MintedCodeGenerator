@@ -1,0 +1,38 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}ifndef COMPUTATION\PYGZus{}CUH}
+\PYG{c+cp}{\PYGZsh{}define COMPUTATION\PYGZus{}CUH}
+
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}Definitions.cuh\PYGZdq{}}
+
+\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{c+c1}{/// Computes gamma using a reduction kernel. Handles kernel launching internally. Requires 2 streams.}
+\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}gamma\PYGZdq{}\PYGZgt{}A pointer to the location to output the calculated gamma.\PYGZlt{}/param\PYGZgt{}}
+\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}streams\PYGZdq{}\PYGZgt{}A pointer to an array of at least 2 streams.\PYGZlt{}/param\PYGZgt{}}
+\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}threadsPerBlock\PYGZdq{}\PYGZgt{}The maximum number of threads per thread block.\PYGZlt{}/param\PYGZgt{}}
+\PYG{n}{cudaError\PYGZus{}t}\PYG{+w}{ }\PYG{n+nf}{ComputeGamma}\PYG{p}{(}\PYG{n}{REAL}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{gamma}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{cudaStream\PYGZus{}t}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{streams}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{threadsPerBlock}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{hVel}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{vVel}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{timestep}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delX}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delY}\PYG{p}{);}
+
+\PYG{n}{cudaError\PYGZus{}t}\PYG{+w}{ }\PYG{n+nf}{ComputeTimestep}\PYG{p}{(}\PYG{n}{REAL}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{timestep}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{cudaStream\PYGZus{}t}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{streams}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{hVel}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{vVel}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delX}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delY}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{reynoldsNo}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{safetyFactor}\PYG{p}{);}
+
+\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{c+c1}{/// Computes F and G. Handles kernel launching internally. Requires 4 threads.}
+\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{n}{cudaError\PYGZus{}t}\PYG{+w}{ }\PYG{n+nf}{ComputeFG}\PYG{p}{(}\PYG{n}{cudaStream\PYGZus{}t}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{streams}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{dim3}\PYG{+w}{ }\PYG{n}{threadsPerBlock}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{hVel}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{vVel}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{F}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{G}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{BYTE}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{flags}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{timestep}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delX}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delY}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{xForce}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{yForce}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{gamma}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{reynoldsNum}\PYG{p}{);}
+
+\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{c+c1}{/// Computes pressure RHS. Requires iMax x jMax threads.}
+\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{k+kr}{\PYGZus{}\PYGZus{}global\PYGZus{}\PYGZus{}}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{ComputeRHS}\PYG{p}{(}\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{F}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{G}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{RHS}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{BYTE}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{flags}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{timestep}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delX}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delY}\PYG{p}{);}
+
+\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{c+c1}{/// Computes both vertical and horizontal velocities. Handles kernel launching internally.}
+\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{n}{cudaError\PYGZus{}t}\PYG{+w}{ }\PYG{n+nf}{ComputeVelocities}\PYG{p}{(}\PYG{n}{cudaStream\PYGZus{}t}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{streams}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{dim3}\PYG{+w}{ }\PYG{n}{threadsPerBlock}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{hVel}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{vVel}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{F}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{G}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{pressure}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{BYTE}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{flags}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{timestep}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delX}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delY}\PYG{p}{);}
+
+\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{c+c1}{/// Computes stream function in the y direction. Requires (iMax + 1) threads.}
+\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{k+kr}{\PYGZus{}\PYGZus{}global\PYGZus{}\PYGZus{}}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n}{ComputeStream}\PYG{p}{(}\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{hVel}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delY}\PYG{p}{);}
+
+\PYG{c+cp}{\PYGZsh{}endif }\PYG{c+c1}{// !COMPUTATION\PYGZus{}CUH}
+\end{Verbatim}

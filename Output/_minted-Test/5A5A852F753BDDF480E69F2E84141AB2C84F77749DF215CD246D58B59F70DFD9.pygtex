@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Data}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.Converters}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{VisualisationYCoordinateInverted}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{VisualisationCoordinate}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{IValueConverter}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Translates a y coordinate from [0, 1] to the precise point as rendered by \PYGZlt{}see cref=\PYGZdq{}VisualisationControl\PYGZdq{} /\PYGZgt{}.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}p\PYGZdq{}\PYGZgt{}The y coordinate in [0, 1] to translate.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A point that maps to the \PYGZlt{}see cref=\PYGZdq{}VisualisationControl\PYGZdq{}/\PYGZgt{} space.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{override}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{TranslateVisualisationCoordinate}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{l+m}{0.0009}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{1.0099}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{override}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n+nf}{TranslateCanvasCoordinate}\PYG{p}{(}\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{p}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{p}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m}{0.0009}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m}{1.0099}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

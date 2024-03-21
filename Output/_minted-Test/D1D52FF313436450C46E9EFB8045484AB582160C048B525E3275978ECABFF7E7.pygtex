@@ -1,0 +1,46 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Collections.ObjectModel}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Globalization}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Data}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Media}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{UserInterface.HelperClasses}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.Converters}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{PolarListToRectList}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{IMultiValueConverter}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Converts a list of polar coordinates to a list of rectangular coordinates with a specified origin.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}values\PYGZdq{}\PYGZgt{}An array of polar point observable collection, and origin (as fractions of the canvas size. Either a \PYGZlt{}see cref=\PYGZdq{}Point\PYGZdq{}/\PYGZgt{} or \PYGZlt{}see cref=\PYGZdq{}string\PYGZdq{}/\PYGZgt{} that can be converted to a point).\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A \PYGZlt{}see cref=\PYGZdq{}PointCollection\PYGZdq{}/\PYGZgt{} of rectangular points.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}exception cref=\PYGZdq{}NotImplementedException\PYGZdq{}\PYGZgt{}\PYGZlt{}/exception\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n+nf}{Convert}\PYG{p}{(}\PYG{k+kt}{object}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{values}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Type}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{parameter}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{CultureInfo}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{RectangularToPolar}\PYG{+w}{ }\PYG{n}{RectToPolConverter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{RectangularToPolar}\PYG{p}{();}
+
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{not}\PYG{+w}{ }\PYG{n}{ObservableCollection}\PYG{o}{\PYGZlt{}}\PYG{n}{PolarPoint}\PYG{o}{\PYGZgt{}}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{n}{ObservableCollection}\PYG{o}{\PYGZlt{}}\PYG{n}{PolarPoint}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{polarPoints}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ObservableCollection}\PYG{o}{\PYGZlt{}}\PYG{n}{PolarPoint}\PYG{o}{\PYGZgt{}}\PYG{p}{)}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{];}
+\PYG{+w}{            }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{origin}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{];}\PYG{+w}{ }\PYG{c+c1}{// Allow RectToPolConverter to do the conversion}
+
+\PYG{+w}{            }\PYG{n}{PointCollection}\PYG{+w}{ }\PYG{n}{points}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{PointCollection}\PYG{p}{();}
+\PYG{+w}{            }\PYG{k}{foreach}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{PolarPoint}\PYG{+w}{ }\PYG{n}{point}\PYG{+w}{ }\PYG{k}{in}\PYG{+w}{ }\PYG{n}{polarPoints}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{rectangularPoint}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Point}\PYG{p}{)}\PYG{n}{RectToPolConverter}\PYG{p}{.}\PYG{n}{ConvertBack}\PYG{p}{(}\PYG{n}{point}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{origin}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{points}\PYG{p}{.}\PYG{n}{Add}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Point}\PYG{p}{(}\PYG{n}{rectangularPoint}\PYG{p}{.}\PYG{n}{X}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{100}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{rectangularPoint}\PYG{p}{.}\PYG{n}{Y}\PYG{p}{));}\PYG{+w}{ }\PYG{c+c1}{// Flip the y coordinates.}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{points}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{p}{[]}\PYG{+w}{ }\PYG{n+nf}{ConvertBack}\PYG{p}{(}\PYG{k+kt}{object}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Type}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{targetTypes}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{parameter}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{CultureInfo}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Conversion not allowed.\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

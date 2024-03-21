@@ -1,0 +1,463 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{//\PYGZsh{}define NO\PYGZus{}GPU\PYGZus{}BACKEND}
+
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Collections.Generic}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.ComponentModel}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Diagnostics}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.IO}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Threading}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Threading.Tasks}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows}\PYG{p}{;}
+
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.HelperClasses}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{enum}\PYG{+w}{ }\PYG{n}{BackendStatus}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Process created but not yet executing.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{n}{NotStarted}\PYG{p}{,}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Currently executing}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{n}{Running}\PYG{p}{,}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Not executing, but in a paused state.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{n}{Stopped}\PYG{p}{,}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Not executing and the process has been destroyed or not yet created.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{n}{Closed}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{c+c1}{/// Handler class for dealing with the backend}
+\PYG{+w}{    }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{BackendManager}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{INotifyPropertyChanged}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{n}{Process}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{backendProcess}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n}{filePath}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{n}{PipeManager}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{n}{BackendStatus}\PYG{+w}{ }\PYG{n}{backendStatus}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[][]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{fields}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{n}{FieldType}\PYG{p}{[]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{namedFields}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{frameTime}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{n}{Stopwatch}\PYG{+w}{ }\PYG{n}{frameTimer}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{n}{ResizableLinearQueue}\PYG{o}{\PYGZlt{}}\PYG{n}{ParameterChangedEventArgs}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{parameterSendQueue}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{n}{ParameterHolder}\PYG{+w}{ }\PYG{n}{parameterHolder}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n}{pipeName}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}NEAFluidDynamicsPipe\PYGZdq{}}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{FieldLength}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{get}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{IMax}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{get}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{;}\PYG{+w}{ }\PYG{k}{set}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{JMax}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{get}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{;}\PYG{+w}{ }\PYG{k}{set}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{jMax}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{;}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{FrameTime}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{get}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{frameTime}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{set}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{frameTime}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{PropertyChanged}\PYG{o}{?.}\PYG{n}{Invoke}\PYG{p}{(}\PYG{k}{this}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{PropertyChangedEventArgs}\PYG{p}{(}\PYG{n}{nameof}\PYG{p}{(}\PYG{n}{FrameTime}\PYG{p}{)));}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{n}{BackendStatus}\PYG{+w}{ }\PYG{n}{BackendStatus}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{get}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{backendStatus}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{set}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{backendStatus}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{PropertyChanged}\PYG{o}{?.}\PYG{n}{Invoke}\PYG{p}{(}\PYG{k}{value}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{PropertyChangedEventArgs}\PYG{p}{(}\PYG{n}{nameof}\PYG{p}{(}\PYG{n}{BackendStatus}\PYG{p}{)));}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{event}\PYG{+w}{ }\PYG{n}{PropertyChangedEventHandler}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{PropertyChanged}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n+nf}{CreateBackend}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{try}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{backendProcess}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Process}\PYG{p}{();}
+\PYG{+w}{                }\PYG{n}{backendProcess}\PYG{p}{.}\PYG{n}{StartInfo}\PYG{p}{.}\PYG{n}{FileName}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{filePath}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{backendProcess}\PYG{p}{.}\PYG{n}{StartInfo}\PYG{p}{.}\PYG{n}{ArgumentList}\PYG{p}{.}\PYG{n}{Add}\PYG{p}{(}\PYG{n}{pipeName}\PYG{p}{);}
+\PYG{+w}{                }\PYG{c+c1}{//backendProcess.StartInfo.CreateNoWindow = true;}
+\PYG{+w}{                }\PYG{n}{backendProcess}\PYG{p}{.}\PYG{n}{Start}\PYG{p}{();}
+\PYG{+w}{                }\PYG{n}{BackendStatus}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{BackendStatus}\PYG{p}{.}\PYG{n}{NotStarted}\PYG{p}{;}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{k}{true}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{catch}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Exception}\PYG{+w}{ }\PYG{n}{ex}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{MessageBox}\PYG{p}{.}\PYG{n}{Show}\PYG{p}{(}\PYG{n}{ex}\PYG{p}{.}\PYG{n}{Message}\PYG{p}{);}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{k}{false}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n+nf}{PipeHandshake}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{PipeManager}\PYG{p}{(}\PYG{n}{pipeName}\PYG{p}{);}
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{WaitForConnection}\PYG{p}{();}
+\PYG{+w}{            }\PYG{p}{(}\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{Handshake}\PYG{p}{();}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{iMax}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m}{0}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{jMax}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// (0,0) is the error condition}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n+nf}{SendControlByte}\PYG{p}{(}\PYG{k+kt}{byte}\PYG{+w}{ }\PYG{n}{controlByte}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{WriteByte}\PYG{p}{(}\PYG{n}{controlByte}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Initialises field arrays and constructs a request byte based on the null\PYGZhy{}ness of the field arguments.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k+kt}{byte}\PYG{+w}{ }\PYG{n+nf}{CheckFieldParameters}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{[]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{horizontalVelocity}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{verticalVelocity}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{pressure}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pipeManager}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Cannot get data when pipe has not been opened\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{requestedFields}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{horizontalVelocity}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{k}{null}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{l+m}{0}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Sum up how many fields are not null}
+\PYG{+w}{            }\PYG{n}{requestedFields}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{verticalVelocity}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{k}{null}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{l+m}{0}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{requestedFields}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{pressure}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{k}{null}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{l+m}{0}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{requestedFields}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{k}{null}\PYG{+w}{ }\PYG{o}{?}\PYG{+w}{ }\PYG{l+m}{0}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{requestedFields}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}No fields have been provided, cannot execute\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{k+kt}{byte}\PYG{+w}{ }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Request}\PYG{p}{.}\PYG{n}{CONTREQ}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{fields}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[}\PYG{n}{requestedFields}\PYG{p}{][];}\PYG{+w}{ }\PYG{c+c1}{// A container for references to all the different fields}
+\PYG{+w}{            }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{fieldNumber}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{FieldType}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{namedFieldsList}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{FieldType}\PYG{o}{\PYGZgt{}}\PYG{p}{();}
+
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{horizontalVelocity}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{horizontalVelocity}\PYG{p}{.}\PYG{n}{Length}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{FieldLength}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Field array is too small\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Request}\PYG{p}{.}\PYG{n}{HVEL}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{fields}\PYG{p}{[}\PYG{n}{fieldNumber}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{horizontalVelocity}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{namedFieldsList}\PYG{p}{.}\PYG{n}{Add}\PYG{p}{(}\PYG{n}{FieldType}\PYG{p}{.}\PYG{n}{HorizontalVelocity}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{fieldNumber}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{verticalVelocity}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{verticalVelocity}\PYG{p}{.}\PYG{n}{Length}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{FieldLength}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Field array is too small\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Request}\PYG{p}{.}\PYG{n}{VVEL}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{fields}\PYG{p}{[}\PYG{n}{fieldNumber}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{verticalVelocity}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{namedFieldsList}\PYG{p}{.}\PYG{n}{Add}\PYG{p}{(}\PYG{n}{FieldType}\PYG{p}{.}\PYG{n}{VerticalVelocity}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{fieldNumber}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pressure}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pressure}\PYG{p}{.}\PYG{n}{Length}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{FieldLength}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Field array is too small\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Request}\PYG{p}{.}\PYG{n}{PRES}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{fields}\PYG{p}{[}\PYG{n}{fieldNumber}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{pressure}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{namedFieldsList}\PYG{p}{.}\PYG{n}{Add}\PYG{p}{(}\PYG{n}{FieldType}\PYG{p}{.}\PYG{n}{Pressure}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{fieldNumber}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{streamFunction}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{streamFunction}\PYG{p}{.}\PYG{n}{Length}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{FieldLength}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Field array is too small\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Request}\PYG{p}{.}\PYG{n}{STRM}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{fields}\PYG{p}{[}\PYG{n}{fieldNumber}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{namedFieldsList}\PYG{p}{.}\PYG{n}{Add}\PYG{p}{(}\PYG{n}{FieldType}\PYG{p}{.}\PYG{n}{StreamFunction}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{n}{namedFields}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{namedFieldsList}\PYG{p}{.}\PYG{n}{ToArray}\PYG{p}{();}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{requestByte}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{async}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{SendParameters}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{parameterSendQueue}\PYG{p}{.}\PYG{n}{IsEmpty}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{ParameterChangedEventArgs}\PYG{+w}{ }\PYG{n}{args}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterSendQueue}\PYG{p}{.}\PYG{n}{Dequeue}\PYG{p}{();}
+\PYG{+w}{                }\PYG{k+kt}{string}\PYG{+w}{ }\PYG{n}{parameterName}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{args}\PYG{p}{.}\PYG{n}{PropertyName}\PYG{p}{;}
+\PYG{+w}{                }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{parameterValue}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{args}\PYG{p}{.}\PYG{n}{NewValue}\PYG{p}{;}
+\PYG{+w}{                }\PYG{k+kt}{byte}\PYG{+w}{ }\PYG{n}{parameterBits}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterName}\PYG{+w}{ }\PYG{k}{switch}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}Width\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{WIDTH}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}Height\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{HEIGHT}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}TimeStepSafetyFactor\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{TAU}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}RelaxationParameter\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{OMEGA}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}PressureResidualTolerance\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{RMAX}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}PressureMaxIterations\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{ITERMAX}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}ReynoldsNumber\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{REYNOLDS}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}InflowVelocity\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{INVEL}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}SurfaceFriction\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{CHI}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{l+s}{\PYGZdq{}FluidViscosity\PYGZdq{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{MU}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{n}{\PYGZus{}}\PYG{+w}{ }\PYG{o}{=\PYGZgt{}}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{,}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{};}
+
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameterBits}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Error case}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Parameter in queue was not recognised\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameterBits}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{ITERMAX}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Itermax is the only parameter that is an integer so needs special treatment}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{((}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{parameterValue}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{parameterBits}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{k}{else}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterValue}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{parameterBits}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{private}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{HandleParameterChanged}\PYG{p}{(}\PYG{k+kt}{object?}\PYG{+w}{ }\PYG{n}{sender}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PropertyChangedEventArgs}\PYG{+w}{ }\PYG{n}{args}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{parameterSendQueue}\PYG{p}{.}\PYG{n}{Enqueue}\PYG{p}{((}\PYG{n}{ParameterChangedEventArgs}\PYG{p}{)}\PYG{n}{args}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{n+nf}{BackendManager}\PYG{p}{(}\PYG{n}{ParameterHolder}\PYG{+w}{ }\PYG{n}{parameterHolder}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{this}\PYG{p}{.}\PYG{n}{parameterHolder}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{parameterHolder}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{PropertyChanged}\PYG{+w}{ }\PYG{o}{+=}\PYG{+w}{ }\PYG{n}{HandleParameterChanged}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{n}{fields}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{namedFields}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{n}{parameterSendQueue}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{p}{();}
+
+\PYG{+w}{            }\PYG{n}{frameTimer}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Stopwatch}\PYG{p}{();}
+
+\PYG{c+cp}{\PYGZsh{}if NO\PYGZus{}GPU\PYGZus{}BACKEND}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{File}\PYG{p}{.}\PYG{n}{Exists}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}.\PYGZbs{}\PYGZbs{}CPUBackend.exe\PYGZdq{}}\PYG{p}{))}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{filePath}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}.\PYGZbs{}\PYGZbs{}CPUBackend.exe\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Look for CPUBackend in same directory...}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{File}\PYG{p}{.}\PYG{n}{Exists}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}x64\PYGZbs{}\PYGZbs{}Debug\PYGZbs{}\PYGZbs{}CPUBackend.exe\PYGZdq{}}\PYG{p}{))}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{filePath}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}x64\PYGZbs{}\PYGZbs{}Debug\PYGZbs{}\PYGZbs{}CPUBackend.exe\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// ...then look in debug directory.}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{MessageBox}\PYG{p}{.}\PYG{n}{Show}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Could not find backend executable. Make sure that CPUBackend.exe exists in the same folder as UserInterface.exe\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{FileNotFoundException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend executable could not be found\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{c+cp}{\PYGZsh{}else // \PYGZca{}\PYGZca{} NO\PYGZus{}GPU\PYGZus{}BACKEND \PYGZca{}\PYGZca{} / vv !NO\PYGZus{}GPU\PYGZus{}BACKEND vv}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{File}\PYG{p}{.}\PYG{n}{Exists}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}.\PYGZbs{}\PYGZbs{}GPUBackend.exe\PYGZdq{}}\PYG{p}{))}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{filePath}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}.\PYGZbs{}\PYGZbs{}GPUBackend.exe\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// First try to find GPU backend in same directory...}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{File}\PYG{p}{.}\PYG{n}{Exists}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}.\PYGZbs{}\PYGZbs{}CPUBackend.exe\PYGZdq{}}\PYG{p}{))}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{filePath}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}.\PYGZbs{}\PYGZbs{}CPUBackend.exe\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// ...then look for CPU backend in same directory.}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{File}\PYG{p}{.}\PYG{n}{Exists}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}x64\PYGZbs{}\PYGZbs{}Debug\PYGZbs{}\PYGZbs{}GPUBackend.exe\PYGZdq{}}\PYG{p}{))}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{filePath}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}x64\PYGZbs{}\PYGZbs{}Debug\PYGZbs{}\PYGZbs{}GPUBackend.exe\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// When debugging, backend executables are here. Try GPU backend first...}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{File}\PYG{p}{.}\PYG{n}{Exists}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}x64\PYGZbs{}\PYGZbs{}Debug\PYGZbs{}\PYGZbs{}CPUBackend.exe\PYGZdq{}}\PYG{p}{))}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{filePath}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}..\PYGZbs{}\PYGZbs{}x64\PYGZbs{}\PYGZbs{}Debug\PYGZbs{}\PYGZbs{}CPUBackend.exe\PYGZdq{}}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// ...then try CPU backend.}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{MessageBox}\PYG{p}{.}\PYG{n}{Show}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Could not find backend executable. Make sure that either GPUBackend.exe or CPUBackend.exe exists in the same folder as UserInterface.exe\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{FileNotFoundException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend executable could not be found\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{c+cp}{\PYGZsh{}endif // !NO\PYGZus{}GPU\PYGZus{}BACKEND}
+
+\PYG{+w}{            }\PYG{n}{BackendStatus}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{BackendStatus}\PYG{p}{.}\PYG{n}{Closed}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Method to start and connect to the backend process}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}Boolean result indicating whether the connection was successful\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n+nf}{ConnectBackend}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nf}{CreateBackend}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n}{PipeHandshake}\PYG{p}{();}\PYG{+w}{ }\PYG{c+c1}{// Return true only if both were successful. Also doesn\PYGZsq{}t attempt handshake if backend did not start correctly}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{async}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{SendAllParameters}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{Width}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{WIDTH}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{Height}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{HEIGHT}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{TimeStepSafetyFactor}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{TAU}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{RelaxationParameter}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{OMEGA}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{PressureResidualTolerance}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{RMAX}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{((}\PYG{k+kt}{int}\PYG{p}{)}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{PressureMaxIterations}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{ITERMAX}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{ReynoldsNumber}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{REYNOLDS}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{InflowVelocity}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{INVEL}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{SurfaceFriction}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{CHI}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+
+\PYG{+w}{            }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendParameter}\PYG{p}{(}\PYG{n}{parameterHolder}\PYG{p}{.}\PYG{n}{FluidViscosity}\PYG{p}{.}\PYG{n}{Value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{MU}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not read parameters correctly\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Asynchronous method to repeatedly receive fields from the backend, for visualisation}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}horizontalVelocity\PYGZdq{}\PYGZgt{}Array to store horizontal velocity data\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}verticalVelocity\PYGZdq{}\PYGZgt{}Array to store vertical velocity data\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}pressure\PYGZdq{}\PYGZgt{}Array to store pressure data\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}streamFunction\PYGZdq{}\PYGZgt{}Array to store stream function data\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}token\PYGZdq{}\PYGZgt{}A cancellation token to stop the method and backend\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}exception cref=\PYGZdq{}InvalidOperationException\PYGZdq{}\PYGZgt{}Thrown when parameters are invalid\PYGZlt{}/exception\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}exception cref=\PYGZdq{}IOException\PYGZdq{}\PYGZgt{}Thrown when backend does not respond as expected\PYGZlt{}/exception\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{async}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{GetFieldStreamsAsync}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{[]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{horizontalVelocity}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{verticalVelocity}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{pressure}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{p}{[]}\PYG{o}{?}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{CancellationToken}\PYG{+w}{ }\PYG{n}{token}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{switch}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{BackendStatus}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{case}\PYG{+w}{ }\PYG{n}{BackendStatus}\PYG{p}{.}\PYG{n}{NotStarted}\PYG{p}{:}
+\PYG{+w}{                    }\PYG{k+kt}{byte}\PYG{+w}{ }\PYG{n}{requestByte}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{CheckFieldParameters}\PYG{p}{(}\PYG{n}{horizontalVelocity}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{verticalVelocity}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{pressure}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{streamFunction}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Abstract the parameter checking into its own function}
+
+\PYG{+w}{                    }\PYG{n}{SendParameters}\PYG{p}{();}\PYG{+w}{ }\PYG{c+c1}{// Send the parameters that were set before the simulation started}
+
+\PYG{+w}{                    }\PYG{n}{SendControlByte}\PYG{p}{(}\PYG{n}{requestByte}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Start the backend executing}
+\PYG{+w}{                    }\PYG{k+kt}{byte}\PYG{+w}{ }\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{();}
+\PYG{+w}{                    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Should receive OK, then the backend will start executing}
+\PYG{+w}{                    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{((}\PYG{n}{receivedByte}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{CATEGORYMASK}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Error}\PYG{p}{.}\PYG{n}{GENERIC}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Throw an exception with the provided error code}
+\PYG{+w}{                        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                            }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdl{}\PYGZdq{}Backend did not receive data correctly. Exception code \PYGZob{}receivedByte\PYGZcb{}.\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                        }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Result from backend not understood\PYGZdq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Throw a generic error if it was not understood at all}
+\PYG{+w}{                    }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{                    }\PYG{k}{break}\PYG{p}{;}
+
+\PYG{+w}{                }\PYG{k}{case}\PYG{+w}{ }\PYG{n}{BackendStatus}\PYG{p}{.}\PYG{n}{Stopped}\PYG{p}{:}\PYG{+w}{ }\PYG{c+c1}{// Resuming from a paused state}
+\PYG{+w}{                    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameterSendQueue}\PYG{p}{.}\PYG{n}{IsEmpty}\PYG{p}{)}
+\PYG{+w}{                    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                        }\PYG{n}{SendControlByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{);}
+\PYG{+w}{                    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                    }\PYG{k}{else}
+\PYG{+w}{                    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                        }\PYG{n}{SendParameters}\PYG{p}{();}
+\PYG{+w}{                        }\PYG{n}{SendControlByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{);}
+\PYG{+w}{                    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                    }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{                }\PYG{k}{case}\PYG{+w}{ }\PYG{n}{BackendStatus}\PYG{p}{.}\PYG{n}{Closed}\PYG{p}{:}
+\PYG{+w}{                    }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend must be created and connected before calling GetFieldStreamsAsync.\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{                }\PYG{k}{default}\PYG{p}{:}
+\PYG{+w}{                    }\PYG{k}{break}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{k+kt}{byte}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{tmpByteBuffer}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{k+kt}{byte}\PYG{p}{[}\PYG{n}{FieldLength}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{)];}\PYG{+w}{ }\PYG{c+c1}{// Temporary buffer for pipe output}
+
+\PYG{+w}{            }\PYG{n}{frameTimer}\PYG{p}{.}\PYG{n}{Start}\PYG{p}{();}\PYG{+w}{ }\PYG{c+c1}{// Start the timer and create a variable to hold the previous time.}
+\PYG{+w}{            }\PYG{n}{TimeSpan}\PYG{+w}{ }\PYG{n}{iterationStartTime}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{frameTimer}\PYG{p}{.}\PYG{n}{Elapsed}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{cancellationRequested}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{token}\PYG{p}{.}\PYG{n}{IsCancellationRequested}\PYG{p}{;}
+\PYG{+w}{            }\PYG{n}{BackendStatus}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{BackendStatus}\PYG{p}{.}\PYG{n}{Running}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{cancellationRequested}\PYG{p}{)}\PYG{+w}{ }\PYG{c+c1}{// Repeat until the task is cancelled}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{ITERSTART}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not send data correctly\PYGZdq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{// Each timestep iteration should start with an ITERSTART}
+
+\PYG{+w}{                }\PYG{k}{for}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{fieldNum}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{fieldNum}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{n}{fields}\PYG{p}{.}\PYG{n}{Length}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{fieldNum}\PYG{o}{++}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k+kt}{byte}\PYG{+w}{ }\PYG{n}{fieldBits}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{byte}\PYG{p}{)}\PYG{n}{namedFields}\PYG{p}{[}\PYG{n}{fieldNum}\PYG{p}{];}
+\PYG{+w}{                    }\PYG{k+kt}{byte}\PYG{+w}{ }\PYG{n}{fieldStart}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{();}
+\PYG{+w}{                    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{fieldStart}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{FLDSTART}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{fieldBits}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdl{}\PYGZdq{}Backend did not send data correctly. Bits were \PYGZob{}fieldStart\PYGZcb{}\PYGZdq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{// Each field should start with a FLDSTART with the relevant field bits}
+
+\PYG{+w}{                    }\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{(}\PYG{n}{tmpByteBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{FieldLength}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{));}\PYG{+w}{ }\PYG{c+c1}{// Read the stream of bytes into the temporary buffer}
+\PYG{+w}{                    }\PYG{n}{Buffer}\PYG{p}{.}\PYG{n}{BlockCopy}\PYG{p}{(}\PYG{n}{tmpByteBuffer}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{fields}\PYG{p}{[}\PYG{n}{fieldNum}\PYG{p}{],}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{FieldLength}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{));}\PYG{+w}{ }\PYG{c+c1}{// Copy the bytes from the temporary buffer into the double array}
+\PYG{+w}{                    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{FLDEND}\PYG{+w}{ }\PYG{o}{|}\PYG{+w}{ }\PYG{n}{fieldBits}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not send data correctly\PYGZdq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{// Each field should start with a FLDEND with the relevant field bits}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Marker}\PYG{p}{.}\PYG{n}{ITEREND}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not send data correctly\PYGZdq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{c+c1}{// Each timestep iteration should end with an ITEREND}
+
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{token}\PYG{p}{.}\PYG{n}{IsCancellationRequested}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{n}{cancellationRequested}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{true}\PYG{p}{;}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameterSendQueue}\PYG{p}{.}\PYG{n}{IsEmpty}\PYG{p}{)}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{n}{SendControlByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{k}{else}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{n}{SendParameters}\PYG{p}{();}
+\PYG{+w}{                    }\PYG{n}{SendControlByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{);}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{n}{TimeSpan}\PYG{+w}{ }\PYG{n}{iterationLength}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{frameTimer}\PYG{p}{.}\PYG{n}{Elapsed}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{iterationStartTime}\PYG{p}{;}
+\PYG{+w}{                }\PYG{n}{FrameTime}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{float}\PYG{p}{)}\PYG{n}{iterationLength}\PYG{p}{.}\PYG{n}{TotalSeconds}\PYG{p}{;}
+
+\PYG{+w}{                }\PYG{n}{iterationStartTime}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{frameTimer}\PYG{p}{.}\PYG{n}{Elapsed}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{// Set the new iteration start time once FPS processing is done.}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{n}{SendControlByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{STOP}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Upon cancellation, stop (pause) the backend.}
+\PYG{+w}{            }\PYG{n}{BackendStatus}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{BackendStatus}\PYG{p}{.}\PYG{n}{Stopped}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{k}{await}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{ReadAsync}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{IOException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Backend did not stop correctly\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n+nf}{SendObstacles}\PYG{p}{(}\PYG{k+kt}{bool}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{obstacles}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{SendObstacles}\PYG{p}{(}\PYG{n}{obstacles}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n+nf}{CloseBackend}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{SendControlByte}\PYG{p}{(}\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{CLOSE}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pipeManager}\PYG{p}{.}\PYG{n}{AttemptRead}\PYG{p}{().}\PYG{n}{data}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{n}{PipeConstants}\PYG{p}{.}\PYG{n}{Status}\PYG{p}{.}\PYG{n}{OK}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{k}{false}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{backendProcess}\PYG{p}{.}\PYG{n}{HasExited}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{k}{false}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{n}{backendProcess}\PYG{p}{.}\PYG{n}{Close}\PYG{p}{();}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{k}{true}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{void}\PYG{+w}{ }\PYG{n+nf}{ForceCloseBackend}\PYG{p}{()}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{backendProcess}\PYG{p}{.}\PYG{n}{Kill}\PYG{p}{();}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

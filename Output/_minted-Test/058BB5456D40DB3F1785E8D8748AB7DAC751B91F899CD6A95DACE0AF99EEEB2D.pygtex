@@ -1,0 +1,69 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Globalization}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows}\PYG{p}{;}
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows.Data}\PYG{p}{;}
+
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.Converters}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{AbsoluteToRelativeRect}\PYG{+w}{ }\PYG{p}{:}\PYG{+w}{ }\PYG{n}{IMultiValueConverter}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// Converts an absolute rectangular coordinate to a relative rectangular coordinate, optionally flipping the y coordinate to make the origin bottom\PYGZhy{}left rather than bottom\PYGZhy{}right.}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}values\PYGZdq{}\PYGZgt{}An array of objects in the form: point, parent width, parent height.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}parameter\PYGZdq{}\PYGZgt{}A boolean specifying whether to flip the y coordinate.\PYGZlt{}/param\PYGZgt{}}
+\PYG{+w}{        }\PYG{c+c1}{/// \PYGZlt{}returns\PYGZgt{}A relative rectangular coordinate.\PYGZlt{}/returns\PYGZgt{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n+nf}{Convert}\PYG{p}{(}\PYG{k+kt}{object}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{values}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Type}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{parameter}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{CultureInfo}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{RelativeDimension}\PYG{+w}{ }\PYG{n}{CoordinateConverter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{RelativeDimension}\PYG{p}{();}
+
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{]}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{not}\PYG{+w}{ }\PYG{n}{Point}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{not}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{]}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{n}{not}\PYG{+w}{ }\PYG{k+kt}{double}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{n}{Point}\PYG{+w}{ }\PYG{n}{point}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{Point}\PYG{p}{)}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{0}\PYG{p}{];}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{canvasWidth}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{)}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{];}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{canvasHeight}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{)}\PYG{n}{values}\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{];}
+
+\PYG{+w}{            }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{flipY}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k}{null}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{flipY}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{false}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{flipY}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{bool}\PYG{p}{)}\PYG{n}{parameter}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}\PYG{+w}{ }\PYG{n+nf}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{parameter}\PYG{+w}{ }\PYG{k}{is}\PYG{+w}{ }\PYG{k+kt}{string}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{k+kt}{bool}\PYG{p}{.}\PYG{n}{TryParse}\PYG{p}{(((}\PYG{k+kt}{string}\PYG{p}{)}\PYG{n}{parameter}\PYG{p}{).}\PYG{n}{ToLower}\PYG{p}{(),}\PYG{+w}{ }\PYG{k}{out}\PYG{+w}{ }\PYG{n}{flipY}\PYG{p}{))}
+\PYG{+w}{                }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{k}{else}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{DependencyProperty}\PYG{p}{.}\PYG{n}{UnsetValue}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{xCoordinate}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{.}\PYG{n}{X}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{yCoordinate}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{point}\PYG{p}{.}\PYG{n}{Y}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{;}
+
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{relativeX}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{)}\PYG{n}{CoordinateConverter}\PYG{p}{.}\PYG{n}{ConvertBack}\PYG{p}{(}\PYG{n}{canvasWidth}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{xCoordinate}\PYG{p}{.}\PYG{n}{ToString}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{relativeY}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{k+kt}{double}\PYG{p}{)}\PYG{n}{CoordinateConverter}\PYG{p}{.}\PYG{n}{ConvertBack}\PYG{p}{(}\PYG{n}{canvasHeight}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{targetType}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{yCoordinate}\PYG{p}{.}\PYG{n}{ToString}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{flipY}\PYG{p}{)}
+\PYG{+w}{            }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{relativeY}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{relativeY}\PYG{p}{;}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{Point}\PYG{p}{(}\PYG{n}{relativeX}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{relativeY}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{p}{[]}\PYG{+w}{ }\PYG{n+nf}{ConvertBack}\PYG{p}{(}\PYG{k+kt}{object}\PYG{+w}{ }\PYG{k}{value}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Type}\PYG{p}{[]}\PYG{+w}{ }\PYG{n}{targetTypes}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{object}\PYG{+w}{ }\PYG{n}{parameter}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{CultureInfo}\PYG{+w}{ }\PYG{n}{culture}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{k}{throw}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n+nf}{InvalidOperationException}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Cannot convert back.\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

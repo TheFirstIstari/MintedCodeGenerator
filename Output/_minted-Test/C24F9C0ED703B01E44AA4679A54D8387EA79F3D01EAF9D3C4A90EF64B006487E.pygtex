@@ -1,0 +1,209 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nt}{\PYGZlt{}UserControl}\PYG{+w}{ }\PYG{n+na}{x:Class=}\PYG{l+s}{\PYGZdq{}UserInterface.Views.SimulationScreen\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns=}\PYG{l+s}{\PYGZdq{}http://schemas.microsoft.com/winfx/2006/xaml/presentation\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns:x=}\PYG{l+s}{\PYGZdq{}http://schemas.microsoft.com/winfx/2006/xaml\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns:mc=}\PYG{l+s}{\PYGZdq{}http://schemas.openxmlformats.org/markup\PYGZhy{}compatibility/2006\PYGZdq{}}\PYG{+w}{ }
+\PYG{+w}{             }\PYG{n+na}{xmlns:d=}\PYG{l+s}{\PYGZdq{}http://schemas.microsoft.com/expression/blend/2008\PYGZdq{}}\PYG{+w}{ }
+\PYG{+w}{             }\PYG{n+na}{xmlns:local=}\PYG{l+s}{\PYGZdq{}clr\PYGZhy{}namespace:UserInterface.Views\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns:helpercontrols=}\PYG{l+s}{\PYGZdq{}clr\PYGZhy{}namespace:UserInterface.HelperControls\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns:diag=}\PYG{l+s}{\PYGZdq{}clr\PYGZhy{}namespace:System.Diagnostics;assembly=WindowsBase\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns:viewmodels=}\PYG{l+s}{\PYGZdq{}clr\PYGZhy{}namespace:UserInterface.ViewModels;assembly=UserInterface\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{xmlns:converters=}\PYG{l+s}{\PYGZdq{}clr\PYGZhy{}namespace:UserInterface.Converters\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{d:DataContext=}\PYG{l+s}{\PYGZdq{}\PYGZob{}d:DesignInstance Type=viewmodels:SimulationScreenVM\PYGZcb{}\PYGZdq{}}
+\PYG{+w}{             }\PYG{n+na}{mc:Ignorable=}\PYG{l+s}{\PYGZdq{}d\PYGZdq{}}\PYG{+w}{ }
+\PYG{+w}{             }\PYG{n+na}{d:DesignHeight=}\PYG{l+s}{\PYGZdq{}450\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{d:DesignWidth=}\PYG{l+s}{\PYGZdq{}800\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{    }\PYG{n+nt}{\PYGZlt{}UserControl.Resources\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}ResourceDictionary\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}converters:SignificantFigures}\PYG{+w}{ }\PYG{n+na}{x:Key=}\PYG{l+s}{\PYGZdq{}SignificantFiguresConverter\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}converters:VisualisationXCoordinate}\PYG{+w}{ }\PYG{n+na}{x:Key=}\PYG{l+s}{\PYGZdq{}XCoordinateConverter\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}converters:VisualisationYCoordinate}\PYG{+w}{ }\PYG{n+na}{x:Key=}\PYG{l+s}{\PYGZdq{}YCoordinateConverter\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}converters:XCoordinateDifference}\PYG{+w}{ }\PYG{n+na}{x:Key=}\PYG{l+s}{\PYGZdq{}XCoordinateDifferenceConverter\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}converters:YCoordinateDifference}\PYG{+w}{ }\PYG{n+na}{x:Key=}\PYG{l+s}{\PYGZdq{}YCoordinateDifferenceConverter\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}converters:PolarListToRectList}\PYG{+w}{ }\PYG{n+na}{x:Key=}\PYG{l+s}{\PYGZdq{}PolarListToRectListConverter\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}converters:AbsoluteToRelativeRect}\PYG{+w}{ }\PYG{n+na}{x:Key=}\PYG{l+s}{\PYGZdq{}CoordinateConverter\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/ResourceDictionary\PYGZgt{}}
+\PYG{+w}{    }\PYG{n+nt}{\PYGZlt{}/UserControl.Resources\PYGZgt{}}
+\PYG{+w}{    }\PYG{n+nt}{\PYGZlt{}Grid\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}Grid.RowDefinitions\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}RowDefinition}\PYG{+w}{ }\PYG{n+na}{Height=}\PYG{l+s}{\PYGZdq{}Auto\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{MaxHeight=}\PYG{l+s}{\PYGZdq{}150\PYGZdq{}}\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}RowDefinition}\PYG{+w}{ }\PYG{n+na}{Height=}\PYG{l+s}{\PYGZdq{}Auto\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}RowDefinition}\PYG{+w}{ }\PYG{n+na}{Height=}\PYG{l+s}{\PYGZdq{}*\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}RowDefinition}\PYG{+w}{ }\PYG{n+na}{Height=}\PYG{l+s}{\PYGZdq{}Auto\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/Grid.RowDefinitions\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}Grid.ColumnDefinitions\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}ColumnDefinition}\PYG{+w}{ }\PYG{n+na}{Width=}\PYG{l+s}{\PYGZdq{}*\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{MaxWidth=}\PYG{l+s}{\PYGZdq{}50\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}ColumnDefinition}\PYG{+w}{ }\PYG{n+na}{Width=}\PYG{l+s}{\PYGZdq{}Auto\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}ColumnDefinition}\PYG{+w}{ }\PYG{n+na}{Width=}\PYG{l+s}{\PYGZdq{}8*\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/Grid.ColumnDefinitions\PYGZgt{}}
+
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}helpercontrols:ResizableCentredTextBox}\PYG{+w}{ }\PYG{n+na}{Grid.Row=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.Column=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.ColumnSpan=}\PYG{l+s}{\PYGZdq{}3\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Text=}\PYG{l+s}{\PYGZdq{}Simulating\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{MaxWidth=}\PYG{l+s}{\PYGZdq{}300\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}StackPanel}\PYG{+w}{ }\PYG{n+na}{Grid.Row=}\PYG{l+s}{\PYGZdq{}1\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.Column=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}StackPanel.Resources\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}Button\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Margin\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}0 0 0 0\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/StackPanel.Resources\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Button}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}BtnParametersSelect\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Command=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding SwitchPanelCommand\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{CommandParameter=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding RelativeSource=\PYGZob{}RelativeSource Self\PYGZcb{}\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Button.Style\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}Button\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Background\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}LightGray\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}Style.Triggers\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}DataTrigger}\PYG{+w}{ }\PYG{n+na}{Binding=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding CurrentButton\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}BtnParametersSelect\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                                }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Background\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZsh{}AAAAAA\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}/DataTrigger\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/Style.Triggers\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Button.Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Image}\PYG{+w}{ }\PYG{n+na}{Source=}\PYG{l+s}{\PYGZdq{}/Images/ParametersIcon.png\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/Button\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Button}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}BtnUnitsSelect\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Command=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding SwitchPanelCommand\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{CommandParameter=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding RelativeSource=\PYGZob{}RelativeSource Self\PYGZcb{}\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Button.Style\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}Button\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Background\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}LightGray\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}Style.Triggers\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}DataTrigger}\PYG{+w}{ }\PYG{n+na}{Binding=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding CurrentButton\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}BtnUnitsSelect\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                                }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Background\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZsh{}AAAAAA\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}/DataTrigger\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/Style.Triggers\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Button.Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Image}\PYG{+w}{ }\PYG{n+na}{Source=}\PYG{l+s}{\PYGZdq{}/Images/UnitsIcon.png\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/Button\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Button}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}BtnVisualisationSettingsSelect\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Command=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding SwitchPanelCommand\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{CommandParameter=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding RelativeSource=\PYGZob{}RelativeSource Self\PYGZcb{}\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Button.Style\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}Button\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Background\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}LightGray\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}Style.Triggers\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}DataTrigger}\PYG{+w}{ }\PYG{n+na}{Binding=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding CurrentButton\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}BtnVisualisationSettingsSelect\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                                }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Background\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZsh{}AAAAAA\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}/DataTrigger\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/Style.Triggers\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Button.Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Image}\PYG{+w}{ }\PYG{n+na}{Source=}\PYG{l+s}{\PYGZdq{}/Images/VisualisationIcon.png\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/Button\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Button}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}BtnRecordingSelect\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Command=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding SwitchPanelCommand\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{CommandParameter=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding RelativeSource=\PYGZob{}RelativeSource Self\PYGZcb{}\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Button.Style\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}Button\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Background\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}LightGray\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}Style.Triggers\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}DataTrigger}\PYG{+w}{ }\PYG{n+na}{Binding=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding CurrentButton\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}BtnRecordingSelect\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                                }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Background\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZsh{}AAAAAA\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}/DataTrigger\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/Style.Triggers\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Button.Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Image}\PYG{+w}{ }\PYG{n+na}{Source=}\PYG{l+s}{\PYGZdq{}/Images/RecordingIcon.png\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/Button\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/StackPanel\PYGZgt{}}
+
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}StackPanel}\PYG{+w}{ }\PYG{n+na}{Grid.Row=}\PYG{l+s}{\PYGZdq{}2\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.Column=}\PYG{l+s}{\PYGZdq{}1\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}StackPanel.Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}StackPanel\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Visibility\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}Collapsed\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Style.Triggers\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}DataTrigger}\PYG{+w}{ }\PYG{n+na}{Binding=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding CurrentButton\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}BtnParametersSelect\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Visibility\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}Visible\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/DataTrigger\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Style.Triggers\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/StackPanel.Style\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Label\PYGZgt{}}Fluid\PYG{+w}{ }Velocity\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}helpercontrols:SliderWithValue}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}SliderInVel\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Minimum=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Maximum=}\PYG{l+s}{\PYGZdq{}40\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding InVel\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Label\PYGZgt{}}Material\PYG{+w}{ }Friction\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}helpercontrols:SliderWithValue}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}SliderChi\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Minimum=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Maximum=}\PYG{l+s}{\PYGZdq{}1\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding Chi\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/StackPanel\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}Label}\PYG{+w}{ }\PYG{n+na}{Grid.Row=}\PYG{l+s}{\PYGZdq{}2\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.Column=}\PYG{l+s}{\PYGZdq{}1\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Label.Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}Label\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Visibility\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}Collapsed\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Style.Triggers\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}DataTrigger}\PYG{+w}{ }\PYG{n+na}{Binding=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding CurrentButton\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}BtnUnitsSelect\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Visibility\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}Visible\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/DataTrigger\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Style.Triggers\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/Label.Style\PYGZgt{}}
+\PYG{+w}{            }This\PYG{+w}{ }is\PYG{+w}{ }the\PYG{+w}{ }units\PYG{+w}{ }selection\PYG{+w}{ }panel
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}StackPanel}\PYG{+w}{ }\PYG{n+na}{Grid.Row=}\PYG{l+s}{\PYGZdq{}2\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.Column=}\PYG{l+s}{\PYGZdq{}1\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}StackPanel.Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}StackPanel\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Visibility\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}Collapsed\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Style.Triggers\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}DataTrigger}\PYG{+w}{ }\PYG{n+na}{Binding=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding CurrentButton\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}BtnVisualisationSettingsSelect\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Visibility\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}Visible\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/DataTrigger\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Style.Triggers\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/StackPanel.Style\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Label\PYGZgt{}}Field\PYG{+w}{ }to\PYG{+w}{ }visualise\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}RadioButton}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}RBPressure\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{GroupName=}\PYG{l+s}{\PYGZdq{}FieldSelector\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{IsChecked=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding PressureChecked\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}Pressure\PYG{n+nt}{\PYGZlt{}/RadioButton\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}RadioButton}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}RBVelocity\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{GroupName=}\PYG{l+s}{\PYGZdq{}FieldSelector\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{IsChecked=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding VelocityChecked\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}Velocity\PYG{n+nt}{\PYGZlt{}/RadioButton\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Label\PYGZgt{}}Minimum\PYG{+w}{ }value\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}helpercontrols:SliderWithValue}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}SliderMin\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Minimum=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding VisLowerBound, Mode=OneWay\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Maximum=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding VisUpperBound, Mode=OneWay\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding VisMin\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Label\PYGZgt{}}Maximum\PYG{+w}{ }value\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}helpercontrols:SliderWithValue}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}SliderMax\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Minimum=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding VisLowerBound, Mode=OneWay\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Maximum=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding VisUpperBound, Mode=OneWay\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding VisMax\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}StackPanel}\PYG{+w}{ }\PYG{n+na}{Orientation=}\PYG{l+s}{\PYGZdq{}Horizontal\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Label\PYGZgt{}}Streamlines\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}CheckBox}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}CBContourLines\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{IsChecked=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding StreamlinesEnabled\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/StackPanel\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Label\PYGZgt{}}Streamline\PYG{+w}{ }contour\PYG{+w}{ }tolerance\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}helpercontrols:SliderWithValue}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}SliderContourTolerance\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Minimum=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Maximum=}\PYG{l+s}{\PYGZdq{}0.05\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding ContourTolerance\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Label\PYGZgt{}}Streamline\PYG{+w}{ }contour\PYG{+w}{ }spacing\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}helpercontrols:SliderWithValue}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}SliderContourSpacing\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Minimum=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Maximum=}\PYG{l+s}{\PYGZdq{}0.5\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding ContourSpacing\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/StackPanel\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}Label}\PYG{+w}{ }\PYG{n+na}{Grid.Row=}\PYG{l+s}{\PYGZdq{}2\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.Column=}\PYG{l+s}{\PYGZdq{}1\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Label.Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}Label\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Visibility\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}Collapsed\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Style.Triggers\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}DataTrigger}\PYG{+w}{ }\PYG{n+na}{Binding=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding CurrentButton\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}BtnRecordingSelect\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Visibility\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}Visible\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/DataTrigger\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Style.Triggers\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/Label.Style\PYGZgt{}}
+\PYG{+w}{            }This\PYG{+w}{ }is\PYG{+w}{ }the\PYG{+w}{ }recording\PYG{+w}{ }settings\PYG{+w}{ }panel
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/Label\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}ContentControl}\PYG{+w}{ }\PYG{n+na}{Grid.Row=}\PYG{l+s}{\PYGZdq{}1\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.RowSpan=}\PYG{l+s}{\PYGZdq{}2\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.Column=}\PYG{l+s}{\PYGZdq{}2\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Margin=}\PYG{l+s}{\PYGZdq{}10 0 10 5\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}VisualisationControlHolder\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Content=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding VisualisationControl, Mode=OneWay\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}ContentControl.Style\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}ContentControl\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Opacity\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}1\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Style.Triggers\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}DataTrigger}\PYG{+w}{ }\PYG{n+na}{Binding=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding EditingObstacles\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}True\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Opacity\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}0.5\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/DataTrigger\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Style.Triggers\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/ContentControl.Style\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/ContentControl\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}Viewbox}\PYG{+w}{ }\PYG{n+na}{Grid.Row=}\PYG{l+s}{\PYGZdq{}1\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.RowSpan=}\PYG{l+s}{\PYGZdq{}2\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.Column=}\PYG{l+s}{\PYGZdq{}2\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Margin=}\PYG{l+s}{\PYGZdq{}10 0 10 5\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Stretch=}\PYG{l+s}{\PYGZdq{}Fill\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{StretchDirection=}\PYG{l+s}{\PYGZdq{}Both\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Canvas}\PYG{+w}{ }\PYG{n+na}{Width=}\PYG{l+s}{\PYGZdq{}100\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Height=}\PYG{l+s}{\PYGZdq{}100\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}SimulationCanvas\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{MouseLeftButtonDown=}\PYG{l+s}{\PYGZdq{}CanvasMouseLeftButtonDown\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{MouseRightButtonDown=}\PYG{l+s}{\PYGZdq{}CanvasMouseRightButtonDown\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{MouseLeftButtonUp=}\PYG{l+s}{\PYGZdq{}CanvasMouseLeftButtonUp\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{MouseMove=}\PYG{l+s}{\PYGZdq{}CanvasMouseMove\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Polygon}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}ObstaclePolygon\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Fill=}\PYG{l+s}{\PYGZdq{}Black\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Polygon.Points\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}MultiBinding}\PYG{+w}{ }\PYG{n+na}{Converter=}\PYG{l+s}{\PYGZdq{}\PYGZob{}StaticResource PolarListToRectListConverter\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}Binding}\PYG{+w}{ }\PYG{n+na}{Path=}\PYG{l+s}{\PYGZdq{}ObstaclePoints\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                            }\PYG{n+nt}{\PYGZlt{}Binding}\PYG{+w}{ }\PYG{n+na}{Path=}\PYG{l+s}{\PYGZdq{}ObstacleCentre\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                        }\PYG{n+nt}{\PYGZlt{}/MultiBinding\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}/Polygon.Points\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Polygon\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/Canvas\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/Viewbox\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}StackPanel}\PYG{+w}{ }\PYG{n+na}{Grid.Row=}\PYG{l+s}{\PYGZdq{}3\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.Column=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Grid.ColumnSpan=}\PYG{l+s}{\PYGZdq{}3\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Orientation=}\PYG{l+s}{\PYGZdq{}Horizontal\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{HorizontalAlignment=}\PYG{l+s}{\PYGZdq{}Right\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}StackPanel.Resources\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}Style}\PYG{+w}{ }\PYG{n+na}{TargetType=}\PYG{l+s}{\PYGZdq{}Button\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}
+\PYG{+w}{                    }\PYG{n+nt}{\PYGZlt{}Setter}\PYG{+w}{ }\PYG{n+na}{Property=}\PYG{l+s}{\PYGZdq{}Margin\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Value=}\PYG{l+s}{\PYGZdq{}2.5 0 2.5 5\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{                }\PYG{n+nt}{\PYGZlt{}/Style\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}/StackPanel.Resources\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}TextBlock}\PYG{+w}{ }\PYG{n+na}{Margin=}\PYG{l+s}{\PYGZdq{}0 0 5 0\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}\PYGZlt{}Run}\PYG{+w}{ }\PYG{n+na}{Text=}\PYG{l+s}{\PYGZdq{}Visualisation: \PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}\PYGZlt{}Run}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}RunVisFPS\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Text=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding VisFPS, Converter=\PYGZob{}StaticResource SignificantFiguresConverter\PYGZcb{}, ConverterParameter=3, Mode=OneWay\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{d:Text=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}\PYGZlt{}Run}\PYG{+w}{ }\PYG{n+na}{Text=}\PYG{l+s}{\PYGZdq{} FPS, Backend: \PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}\PYGZlt{}Run}\PYG{+w}{ }\PYG{n+na}{x:Name=}\PYG{l+s}{\PYGZdq{}RunBackFPS\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Text=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding BackFPS, Converter=\PYGZob{}StaticResource SignificantFiguresConverter\PYGZcb{}, ConverterParameter=3, Mode=OneWay\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{d:Text=}\PYG{l+s}{\PYGZdq{}0\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}\PYGZlt{}Run}\PYG{+w}{ }\PYG{n+na}{Text=}\PYG{l+s}{\PYGZdq{} FPS.\PYGZdq{}}\PYG{n+nt}{/\PYGZgt{}\PYGZlt{}/TextBlock\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Button}\PYG{+w}{ }\PYG{n+na}{Command=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding EditObstaclesCommand\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Content=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding EditObstaclesButtonText\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{d:Content=}\PYG{l+s}{\PYGZdq{}Edit simulation obstacles\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Button}\PYG{+w}{ }\PYG{n+na}{Command=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding CreatePopupCommand\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{CommandParameter=}\PYG{l+s}{\PYGZdq{}\PYGZob{}x:Type local:AdvancedParameters\PYGZcb{}\PYGZdq{}}\PYG{n+nt}{\PYGZgt{}}Advanced\PYG{+w}{ }parameters\PYG{n+nt}{\PYGZlt{}/Button\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Button\PYGZgt{}}Save\PYG{+w}{ }as\PYG{+w}{ }image\PYG{n+nt}{\PYGZlt{}/Button\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Button\PYGZgt{}}Save\PYG{+w}{ }as\PYG{+w}{ }video\PYG{n+nt}{\PYGZlt{}/Button\PYGZgt{}}
+\PYG{+w}{            }\PYG{n+nt}{\PYGZlt{}Button}\PYG{+w}{ }\PYG{n+na}{Content=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding BackendButtonText\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{Command=}\PYG{l+s}{\PYGZdq{}\PYGZob{}Binding BackendCommand\PYGZcb{}\PYGZdq{}}\PYG{+w}{ }\PYG{n+na}{d:Content=}\PYG{l+s}{\PYGZdq{}Pause Simulation\PYGZdq{}}\PYG{+w}{ }\PYG{n+nt}{/\PYGZgt{}}
+\PYG{+w}{        }\PYG{n+nt}{\PYGZlt{}/StackPanel\PYGZgt{}}
+\PYG{+w}{    }\PYG{n+nt}{\PYGZlt{}/Grid\PYGZgt{}}
+\PYG{n+nt}{\PYGZlt{}/UserControl\PYGZgt{}}
+\end{Verbatim}

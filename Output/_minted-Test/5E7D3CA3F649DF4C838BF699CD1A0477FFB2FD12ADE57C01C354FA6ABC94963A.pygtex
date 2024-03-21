@@ -1,0 +1,28 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{namespace}\PYG{+w}{ }\PYG{n+nn}{UserInterface.HelperClasses}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{DefaultParameters}
+\PYG{+w}{    }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{WIDTH}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{HEIGHT}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{TIMESTEP\PYGZus{}SAFETY\PYGZus{}FACTOR}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.8f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{RELAXATION\PYGZus{}PARAMETER}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1.7f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{PRESSURE\PYGZus{}RESIDUAL\PYGZus{}TOLERANCE}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{PRESSURE\PYGZus{}MAX\PYGZus{}ITERATIONS}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1000f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{REYNOLDS\PYGZus{}NUMBER}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2000f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{FLUID\PYGZus{}VISCOSITY}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1.983E\PYGZhy{}5f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{FLUID\PYGZus{}VELOCITY}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{SURFACE\PYGZus{}FRICTION}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0f}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{DRAW\PYGZus{}CONTOURS}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{true}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{CONTOUR\PYGZus{}TOLERANCE}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.01f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{CONTOUR\PYGZus{}SPACING}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.05f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{FPS\PYGZus{}WINDOW\PYGZus{}SIZE}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{500}\PYG{p}{;}
+
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{VELOCITY\PYGZus{}MIN}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{VELOCITY\PYGZus{}MAX}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{5f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{PRESSURE\PYGZus{}MIN}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1000f}\PYG{p}{;}
+\PYG{+w}{        }\PYG{k}{public}\PYG{+w}{ }\PYG{k}{static}\PYG{+w}{ }\PYG{k}{readonly}\PYG{+w}{ }\PYG{k+kt}{float}\PYG{+w}{ }\PYG{n}{PRESSURE\PYGZus{}MAX}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{5000f}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

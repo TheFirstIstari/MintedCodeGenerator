@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}ifndef PRESSURE\PYGZus{}COMPUTATION\PYGZus{}CUH}
+
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}Definitions.cuh\PYGZdq{}}
+
+\PYG{c+c1}{/// \PYGZlt{}summary\PYGZgt{}}
+\PYG{c+c1}{/// Performs SOR iterations to solve the pressure poisson equation. Handles kernel launching internally. Requires 4 streams.}
+\PYG{c+c1}{/// \PYGZlt{}/summary\PYGZgt{}}
+\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}coordinates\PYGZdq{}\PYGZgt{}The coordinates of the boundary cells.\PYGZlt{}/param\PYGZgt{}}
+\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}coordinatesLength\PYGZdq{}\PYGZgt{}The length of the coordinates array.\PYGZlt{}/param\PYGZgt{}}
+\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}omega\PYGZdq{}\PYGZgt{}Relaxation between 0 and 2.\PYGZlt{}/param\PYGZgt{}}
+\PYG{c+c1}{/// \PYGZlt{}param name=\PYGZdq{}residualNorm\PYGZdq{}\PYGZgt{}The residual norm of the final iteration. This is an output variable, and does not need to be allocated.\PYGZlt{}/param\PYGZgt{}}
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{Poisson}\PYG{p}{(}\PYG{n}{cudaStream\PYGZus{}t}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{streams}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{dim3}\PYG{+w}{ }\PYG{n}{threadsPerBlock}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{pressure}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{REAL}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{RHS}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{PointerWithPitch}\PYG{o}{\PYGZlt{}}\PYG{n}{BYTE}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{flags}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{uint2}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{coordinates}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{coordinatesLength}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{numFluidCells}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{iMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{jMax}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{numColours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delX}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{delY}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{residualTolerance}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{minIterations}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{maxIterations}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{+w}{ }\PYG{n}{omega}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REAL}\PYG{o}{*}\PYG{+w}{ }\PYG{n}{residualNorm}\PYG{p}{);}
+
+\PYG{c+cp}{\PYGZsh{}endif }\PYG{c+c1}{// !PRESSURE\PYGZus{}COMPUTATION\PYGZus{}CUH}
+\end{Verbatim}

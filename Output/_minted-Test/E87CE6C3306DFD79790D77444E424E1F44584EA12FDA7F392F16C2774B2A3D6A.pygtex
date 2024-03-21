@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{using}\PYG{+w}{ }\PYG{n+nn}{System.Windows}\PYG{p}{;}
+
+\PYG{n+na}{[assembly: ThemeInfo(}
+\PYG{n+na}{    ResourceDictionaryLocation.None, // where theme specific resource dictionaries are located}
+\PYG{n+na}{                                     // (used if a resource is not found in the page,}
+\PYG{n+na}{                                     // or application resource dictionaries)}
+\PYG{n+na}{    ResourceDictionaryLocation.SourceAssembly // where the generic resource dictionary is located}
+\PYG{n+na}{                                              // (used if a resource is not found in the page,}
+\PYG{n+na}{                                              // app, or any theme specific resource dictionaries)}
+\PYG{n+na}{)]}
+\end{Verbatim}

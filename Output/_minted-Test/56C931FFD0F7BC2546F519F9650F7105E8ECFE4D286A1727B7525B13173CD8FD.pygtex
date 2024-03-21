@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// pch.h: This is a precompiled header file.}
+\PYG{c+c1}{// Files listed below are compiled only once, improving build performance for future builds.}
+
+\PYG{c+cp}{\PYGZsh{}ifndef PCH\PYGZus{}H}
+\PYG{c+cp}{\PYGZsh{}define PCH\PYGZus{}H}
+
+\PYG{c+c1}{// add headers that you want to pre\PYGZhy{}compile here}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}utility\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}memory\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}Definitions.h\PYGZdq{}}
+
+\PYG{c+cp}{\PYGZsh{}endif }\PYG{c+c1}{//PCH\PYGZus{}H}
+\end{Verbatim}
