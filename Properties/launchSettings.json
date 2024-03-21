@@ -2,7 +2,7 @@
   "profiles": {
     "MintedCodeGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "\"F:\\NEAProjectDocumentation\\Appendices\\F - Source code.tex\" \"F:\\NEAFluidDynamics\""
+      "commandLineArgs": "\"\"C:\\Users\\eupho\\Desktop\\project\\Documentation\\sections\\Code.tex\"\" \"C:\\Users\\eupho\\Desktop\\project\\FrontEnd3\""
     }
   }
 }

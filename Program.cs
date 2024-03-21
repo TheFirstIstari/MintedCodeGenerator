@@ -4,6 +4,7 @@
     {
         public static void Main(string[] args)
         {
+
             if (args.Length > 0 && (args[1] == "-h") || args[1] == "--help")
             {
                 Console.WriteLine($"{AppDomain.CurrentDomain.FriendlyName} usage:");

@@ -171,18 +171,14 @@
 
         public static void CreateOutputFile(string outputFilePath, string sourceFileDirectory, string[] codeBeforeListings, string[] codeAfterListings)
         {
-            List<string> ignoredDirectories = ["bin", "Builds", "obj", "Debug", "x64", ".vs", ".git", "Platforms", "Properties"];
+            List<string> ignoredDirectories = ["bin", "Builds", "obj", "Debug", "x64", ".vs", ".git", "Properties"];
             Dictionary<string, string> fileExtensions = new Dictionary<string, string>
             {
                 { ".cs", "cs" },
                 { ".xaml.cs", "cs" },
                 { ".xaml", "xml" },
-                { ".cpp", "cpp" },
-                { ".h", "cpp" },
-                { ".cu", "cuda" },
-                { ".cuh", "cuda" },
-                { ".vert", "glsl" },
-                { ".frag", "glsl" }
+                {".manifest", "xml" },
+                {".appxmanifest", "xml" }
             };
 
             List<FilePath> filePaths = GetFileList(sourceFileDirectory, ignoredDirectories);
