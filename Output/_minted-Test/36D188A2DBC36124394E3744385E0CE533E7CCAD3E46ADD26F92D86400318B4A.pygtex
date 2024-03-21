@@ -1,7 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{c+c1}{// BackendLib.cpp : Defines the functions for the static library.}
-\PYG{c+c1}{//}
-
-\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZdq{}pch.h\PYGZdq{}}
-
-\end{Verbatim}
